@@ -6,8 +6,8 @@
 #关于文章请前往[Doter简书](http://www.jianshu.com/u/5721922d1d60)
 以下属于个人作品展示:
 # 关于D3：
-## [时间轴](./d3/timeLine/index.html)
+## [时间轴](./d3/timeLine/)
 
 # 关于threejs：
 
-## [地球](./three/timeLine/index.html)
+## [地球](./three/timeLine/)
