@@ -1,8 +1,8 @@
 // import THREE from 'three'
 window.onload = function () {
-    console.log("this three verion:", THREE.REVISION)
+    console.log("this Root verion:", THREE.REVISION)
     const R = 200;
-    var three = {
+    var Root = {
         W: window.innerWidth,
         H: window.innerHeight,
         Root: document.getElementById('root'),
@@ -10,18 +10,30 @@ window.onload = function () {
     var renderer = new THREE.WebGLRenderer({ antialias: true })
     //建议设置大小，否则会出现锯齿
     renderer.setSize(window.innerWidth, window.innerHeight);
-    three.Root.appendChild(renderer.domElement)
+    Root.Root.appendChild(renderer.domElement)
     //创建场景
     var scene = new THREE.Scene();
-    var amblight = new THREE.AmbientLight(0xffffff);
-    var light = new THREE.DirectionalLight(0xffffff, 1);
+    //设置场景背景色
+    scene.background= new THREE.Color(0x333333);
+    //添加雾化效果
+    scene.fog = new THREE.Fog('#666', 15000, 20000)
+    var amblight = new THREE.AmbientLight(0xffffff, 1.5);
+      
     scene.add(amblight);
-    light.position.set(0, 150, 0);
+    var light = new THREE.DirectionalLight('#FFF', 1);
+    light.position.set(0, -7000, 0);
+    var helper = new THREE.DirectionalLightHelper( light, 10000 );
+    scene.add(helper)
     scene.add(light);
     var axisHelper = new THREE.AxisHelper(800);
     scene.add(axisHelper);
 
-    var camera = new THREE.PerspectiveCamera(60, three.W / three.H, 0.1, 200000);
+    var geometry = new THREE.Geometry(),
+				pickingGeometry = new THREE.Geometry(),
+				pickingMaterial = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } ),
+				defaultMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
+
+    var camera = new THREE.PerspectiveCamera(60, Root.W / Root.H, 0.1, 200000);
     camera.position.set(0, 0, 15000);
     // camera.position.set(-117.5,191.6,-290.7);
     camera.lookAt(scene.position);
@@ -42,6 +54,7 @@ window.onload = function () {
             scene.add(object);
         });
     });
+
 
 
     //添加一个控制器
