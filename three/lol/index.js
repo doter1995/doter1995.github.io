@@ -14,24 +14,24 @@ window.onload = function () {
     //创建场景
     var scene = new THREE.Scene();
     //设置场景背景色
-    scene.background= new THREE.Color(0x333333);
+    scene.background = new THREE.Color(0x333333);
     //添加雾化效果
     scene.fog = new THREE.Fog('#666', 15000, 20000)
     var amblight = new THREE.AmbientLight(0xffffff, 1.5);
-      
+
     scene.add(amblight);
     var light = new THREE.DirectionalLight('#FFF', 1);
     light.position.set(0, -7000, 0);
-    var helper = new THREE.DirectionalLightHelper( light, 10000 );
+    var helper = new THREE.DirectionalLightHelper(light, 10000);
     scene.add(helper)
     scene.add(light);
     var axisHelper = new THREE.AxisHelper(800);
     scene.add(axisHelper);
 
     var geometry = new THREE.Geometry(),
-				pickingGeometry = new THREE.Geometry(),
-				pickingMaterial = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } ),
-				defaultMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
+        pickingGeometry = new THREE.Geometry(),
+        pickingMaterial = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors }),
+        defaultMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0 });
 
     var camera = new THREE.PerspectiveCamera(60, Root.W / Root.H, 0.1, 200000);
     camera.position.set(0, 0, 15000);
