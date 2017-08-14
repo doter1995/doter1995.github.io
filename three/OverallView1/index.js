@@ -65,7 +65,7 @@ window.onload = function () {
     )
     meshGroup.add(mesh);
     //添加一个监测目标
-    var geometry = new THREE.PlaneGeometry(2, 2.5, );
+    var geometry = new THREE.PlaneGeometry(2, 2.5);
     var material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('img/1.png'), side: THREE.DoubleSide });
     material.wireframe = true;
     var plane = new THREE.Mesh(geometry, material);
