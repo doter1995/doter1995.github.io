@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/doter1995/doter1995.github.io#readme",
   "dependencies": {
+    "d3": "^4.10.0",
     "koa": "^2.3.0",
     "three": "^0.86.0"
   }
