@@ -142,7 +142,7 @@ body{
     font-weight: 700;
 }
 .scontext_middel p:last-child{
-    margin-top: .3rem;
+    margin-top: .5rem;
 }
 .scontext_right {
     flex-grow: 1;
@@ -226,7 +226,7 @@ body{
 }
 
 .table ul li:first-child p:last-child{
-    font-size: .2rem;
+    font-size: .7rem;
 }
 #thead{
     background-color: #f4f4f4;
