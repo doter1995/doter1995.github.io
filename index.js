@@ -1,13 +1,22 @@
 // import d3 from 'd3';
 window.onload = function () {
   console.log("使用d3版本", d3.version)
-
+  var isRun=true;
   function init() {
     var height = 200;
+    var MP3 = document.getElementById('mp3')
     var Root = d3.select("#d3_root")
-      .append('svg')
+      .insert('svg')
       .attr("width", '100%')
       .attr("height", height)
+      .on('click',function (){
+        if(isRun){
+          MP3.pause();
+        }else{
+          MP3.play();
+        }
+        isRun=!isRun;
+      })
     var width = document.getElementById('d3_root').clientWidth;
     console.log(width);
     var lisLength = width / 10;
@@ -21,7 +30,7 @@ window.onload = function () {
     var y = d3.scaleLinear()
       .domain([0, 1])
       .range([0, height])
-    var color = d3.scaleOrdinal(d3.schemeCategory20);
+    var color = d3.scaleOrdinal(d3.schemeCategory20b);
     //渲染柱状图
     var rectG = Root
       .append("g");
@@ -38,6 +47,9 @@ window.onload = function () {
     //更新柱状图
     setInterval(myInterval, 150);//1000为1秒钟
     function myInterval() {
+      if(!isRun){
+        return;
+      }
       //更新随机数据
       var list = random(lisLength)
       var rects = rectG.selectAll('rect')

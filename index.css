@@ -19,9 +19,6 @@ nav{
 
 .myNetName{
    float: right;
-   position: absolute;
-   top:20px;
-   left: 70%;
     font-size: 1.3em;
     color: #eee;
     margin-right: 40px;

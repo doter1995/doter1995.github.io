@@ -41,7 +41,7 @@ window.onload = function () {
         var sphere1 = new THREE.Mesh(
             new THREE.SphereGeometry(600, 50, 50),
             new THREE.MeshBasicMaterial({
-                side: THREE.BackSide,
+                side: THREE.FrontSide,
                 map: new THREE.TextureLoader().load('./img/galaxy_starfield.png')
             })
         );
@@ -49,23 +49,25 @@ window.onload = function () {
         scene.add(groupSphere);
 
     }
-    function initHome(){
-        var home =new THREE.Group();
+    function initHome() {
+        var home = new THREE.Group();
         var HomeGeometry = new THREE.BoxGeometry(150, 150, 150);
         var outMeshMaterial
         var homeMesh = new THREE.Mesh(HomeGeometry, [new THREE.MeshBasicMaterial(
             {
-                side: THREE.DoubleSide,
-                map: [
-                    new THREE.TextureLoader().load('./img/outTop.jpg'),
-                    new THREE.TextureLoader().load('./img/outWall.jpg'),
-                    new THREE.TextureLoader().load('./img/outWall.jpg'),
-                    new THREE.TextureLoader().load('./img/outWall.jpg'),
-                    new THREE.TextureLoader().load('./img/outWall.jpg'),
-                    new THREE.TextureLoader().load('./img/outWall.jpg')
-                ]
+                side: THREE.FrontSide,
+                map: new THREE.TextureLoader().load('./img/outWall.jpg'),
+
             }
-        ))
+        ),
+        new THREE.MeshBasicMaterial(
+            {
+                side: THREE.BackSide,
+                map: new THREE.TextureLoader().load('./img/outWall.jpg'),
+
+            }
+        )]
+        )
         home.add(homeMesh);
         scene.add(home);
     }
