@@ -1,0 +1,290 @@
+{
+	"nodes": [{
+		"op_type": "Op_Multiply",
+		"flow": {
+			"x": 80,
+			"y": 55,
+			"w": 181.828125,
+			"h": 98.5,
+			"c": 0
+		},
+		"input": [{
+			"type": "ElementType_DataRecord",
+			"node": {
+				"x": 70,
+				"y": 80.5,
+				"r": 10,
+				"to": -1
+			},
+			"value": {
+				"metadata": {
+					"spatialArea": "Shanbei",
+					"startDate": "20100501",
+					"endDate": "20100531",
+					"columns": "DYP",
+					"stationType": "HydrologyStation"
+				},
+				"interval": "Interval_1day",
+				"summaryType": "Summary_Sum"
+			}
+		},
+		{
+			"type": "ElementType_Double",
+			"node": {
+				"x": 70,
+				"y": 123.5,
+				"r": 10,
+				"to": -1
+			},
+			"value": 2
+		}],
+		"outputAttr": {
+			"node": {
+				"x": 276.828125,
+				"y": 102.5,
+				"r": 15
+			},
+			"cached": true,
+			"saveToFile": false,
+			"saveToAccu": false,
+			"resultId": "Q_Sum"
+		},
+		"name": "Q"
+	},
+	{
+		"op_type": "Op_GroupBy",
+		"flow": {
+			"x": 340,
+			"y": 52,
+			"w": 200.828125,
+			"h": 96.5,
+			"c": 0
+		},
+		"input": [{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 330,
+				"y": 102.5,
+				"r": 10,
+				"to": 0
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "Q_Sum"
+			}
+		}],
+		"outputAttr": {
+			"node": {
+				"x": 555.828125,
+				"y": 99.5,
+				"r": 15
+			},
+			"cached": true,
+			"saveToFile": false,
+			"saveToAccu": false,
+			"resultId": "Q_Monthly"
+		},
+		"modelParam": {
+			"summaryType": "Summary_Sum",
+			"interval": "Interval_1day"
+		},
+		"name": "Q_Monthly"
+	},
+	{
+		"op_type": "Op_GroupBy",
+		"flow": {
+			"x": 341,
+			"y": 203,
+			"w": 200,
+			"h": 100,
+			"c": 0
+		},
+		"input": [{
+			"type": "ElementType_DataRecord",
+			"node": {
+				"x": 331,
+				"y": 254.5,
+				"r": 10,
+				"to": -1
+			},
+			"value": {
+				"metadata": {
+					"spatialArea": "Shanbei",
+					"startDate": "20100501",
+					"endDate": "20100531",
+					"columns": "DYP",
+					"stationType": "HydrologyStation"
+				},
+				"interval": "Interval_1day",
+				"summaryType": "Summary_Sum"
+			}
+		}],
+		"outputAttr": {
+			"node": {
+				"x": 541,
+				"y": 253,
+				"r": 15
+			},
+			"cached": true,
+			"saveToFile": false,
+			"saveToAccu": false,
+			"resultId": "P_Monthly"
+		},
+		"modelParam": {
+			"summaryType": "Summary_Sum",
+			"interval": "Interval_1day"
+		},
+		"name": "P_Monthly"
+	},
+	{
+		"op_type": "Op_Divide",
+		"flow": {
+			"x": 650,
+			"y": 79,
+			"w": 200,
+			"h": 100,
+			"c": 0
+		},
+		"input": [{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 640,
+				"y": 112.5,
+				"r": 10,
+				"to": 1
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "Q_Monthly"
+			}
+		},
+		{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 640,
+				"y": 153.5,
+				"r": 10,
+				"to": 2
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "P_Monthly"
+			}
+		}],
+		"outputAttr": {
+			"node": {
+				"x": 850,
+				"y": 129,
+				"r": 15
+			},
+			"cached": true,
+			"saveToFile": false,
+			"saveToAccu": false,
+			"resultId": "Divide_Q_By_P"
+		},
+		"name": "Q/P"
+	},
+	{
+		"op_type": "Op_Sub",
+		"flow": {
+			"x": 648,
+			"y": 186,
+			"w": 200,
+			"h": 100,
+			"c": 0
+		},
+		"input": [{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 638,
+				"y": 255.5,
+				"r": 10,
+				"to": 2
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "P_Monthly"
+			}
+		},
+		{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 638,
+				"y": 218.5,
+				"r": 10,
+				"to": 1
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "Q_Monthly"
+			}
+		}],
+		"outputAttr": {
+			"node": {
+				"x": 848,
+				"y": 236,
+				"r": 15
+			},
+			"cached": true,
+			"saveToFile": false,
+			"saveToAccu": false,
+			"resultId": "Sub_P_By_Q"
+		},
+		"name": "P - Q"
+	},
+	{
+		"op_type": "Op_Multiply",
+		"flow": {
+			"x": 921,
+			"y": 131,
+			"w": 200,
+			"h": 100,
+			"c": 0
+		},
+		"input": [{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 911,
+				"y": 193.5,
+				"r": 10,
+				"to": 4
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "Sub_P_By_Q"
+			}
+		},
+		{
+			"type": "ElementType_FromResult",
+			"node": {
+				"x": 911,
+				"y": 159.5,
+				"r": 10,
+				"to": 3
+			},
+			"value": {
+				"id": "id2",
+				"layerId": "",
+				"resultId": "Divide_Q_By_P"
+			}
+		}],
+		"outputAttr": {
+			"node": {
+				"x": 1121,
+				"y": 181,
+				"r": 15
+			},
+			"cached": true,
+			"saveToFile": false,
+			"saveToAccu": false,
+			"resultId": "201005_S"
+		},
+		"name": "潜在最大保持量"
+	}]
+}

@@ -1,0 +1,61 @@
+.workflow_rect_out1{
+  fill:#00796b;
+}
+.workflow_rect_inner{
+  fill:#B2DfDb;
+}
+.workflow_out{
+    fill:#f17b49;
+  stroke:#f17b49;
+}
+.workflow_rect_out0{
+  fill: #00796b;
+}
+.workflow_rect_out1{
+  fill:#ccdb38;
+}
+.workflow_rect_out2{
+  fill:#feea3a;
+}
+.workflow_rect_out3{
+  fill:#40E0D0;
+}
+/*输入点样式*/
+.workflow_input{
+  fill:#649191;
+  stroke:#79cc5d;
+   user-select:none;
+ -moz-user-select:none;
+ cursor:move
+}
+.workflow_input_1{
+ user-select:none;
+ -moz-user-select:none;
+ cursor: move
+}
+/*输出点样式*/
+.workflow_out{
+  fill:#f17b49;
+  stroke:#f17b49;
+}
+.text-node{
+  user-select: none;
+  -moz-user-select :none;
+  font-size: 12px;
+}
+svg{
+    user-select: none;
+  -moz-user-select :none;
+}
+.workflow_circle_tip{
+  z-index: -1;
+  fill:#757575;
+  stroke: #ccdb38;
+}
+.rectRn_resize{
+  user-select:none;
+  -moz-user-select:none;
+  cursor: nw-resize;
+  fill:#fff; 
+  fill-opacity:0;
+}

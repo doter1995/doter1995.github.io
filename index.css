@@ -20,7 +20,7 @@ nav{
 .myNetName{
    float: right;
     font-size: 1.3em;
-    color: #eee;
+    color: #AB9393;
     margin-right: 40px;
 }
 nav>h1 {
@@ -65,4 +65,10 @@ li{
 }
 .p_title{
         font-size: 1.2em;
+}
+.music_tip{
+    position: fixed;
+    top:10px;
+    left: 10px;
+    color: #eee;
 }
