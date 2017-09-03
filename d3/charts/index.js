@@ -38,7 +38,9 @@ window.onload = function () {
             .padAngle(.04)
             .sortSubgroups(d3.descending)
             .sortChords(d3.ascending);
-        group.datum(chord(dataSet))
+        var resource = chord(dataSet)
+        console.log(resource)
+        group.datum(resource)
         var g = group
             .append('g')
             .attr('class', 'group')
