@@ -25,7 +25,8 @@ window.onload = function () {
         { 'source': 2, 'target': 5 },
         { 'source': 2, 'target': 6 }]
     };
-    // 构建布局
+    // 构建布局 构建布局
+    //dataSet.edges_data这个数据会被处理为links
     var simulation = d3.forceSimulation(dataSet.nodes_data)
         .force("charge", d3.forceManyBody().strength(-500))	 //节点间的作用力
         .force("link", d3.forceLink(dataSet.edges_data).distance(20).strength(1))	  //连线作用力
@@ -53,8 +54,8 @@ window.onload = function () {
             d.fy = null;
         }) //mousedown
     //pies存储的是计算后的数据
-    //绘制
-
+    
+    //绘制links
     var link = svg.selectAll("g.link")
         .data(dataSet.edges_data)
         .enter()
