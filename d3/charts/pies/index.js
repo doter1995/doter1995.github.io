@@ -1,5 +1,6 @@
 // import d3 from 'd3'
 window.onload = function () {
+    var isRun = true
     var width = window.innerWidth * .9
     var height = window.innerHeight * .9
     var inner = 10
@@ -25,10 +26,10 @@ window.onload = function () {
             d.dy += d3.event.dy;
             d3.select(this).attr("transform", "translate(" + d.dx + "," + d.dy + ")");
         })
-    var arcGroup = svg.selectAll('g')
-        .data(pies)
+    var arcGroup = svg.data(pies)
         .enter()
         .append('g')
+        .attr('class','arcG')
         .each(function (d) {
             d.dx = width / 2
             d.dy = height / 2
@@ -39,6 +40,20 @@ window.onload = function () {
         .attr("fill", function (d, i) { return color(i) })
         .attr("d", arc)
 
+    setInterval(rerender, 1000)
+    function rerender() {
+        pies = d3.shuffle(pies)
+        arcGroup.data(pies)
+        arcGroup.transition()
+            .duration(500)
+            .select('path')
+            .attr("fill", function (d, i) { return color(i) })
+            .attr('d', arc)
+    }
 
-
+    function redraw(){
+        //处理 update enter exit
+        var update = svg.selectAll('g.arcG')
+            .data(pies)
+    }
 }
