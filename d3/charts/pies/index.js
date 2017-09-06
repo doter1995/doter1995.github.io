@@ -7,7 +7,7 @@ window.onload = function () {
     var outer = 100
     var svg = d3.select("#root").append('svg')
         .attr('width', width)
-        .attr('height', height+1)
+        .attr('height', height)
     var color = d3.scaleOrdinal(d3.schemeCategory20)
     //准备数据
     var data = [1, 3, 3, 5, 8, 13, 21];
