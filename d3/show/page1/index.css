@@ -1,0 +1,25 @@
+* {
+    margin:0px;
+    padding: 0px;
+}
+body{
+    background-color: #7C3ACB
+}
+header{
+    font-size: 1.2rem;
+    line-height: 1.3;
+    border-bottom: solid 1px #fed;
+}
+section{
+    border-bottom: solid 1px #fed;
+}
+
+#bg_test{
+    background-color: rgba(58, 83, 215, 0.20);
+
+}
+footer{
+    position: fixed;
+    bottom: 0;
+    
+}
