@@ -1,8 +1,5 @@
 // import d3 from 'd3'
 window.onload = function () {
-  console.log('d3.versioon', d3)
-  //设置body背景
-  d3.select('body').style('backgroud-color','#654f65')
   var root = document.getElementById('root')
   var width = window.innerWidth * 0.9
   var height = window.innerHeight * 0.9
@@ -43,7 +40,7 @@ window.onload = function () {
   var scaleArc = d3.scaleLinear().domain([0, 100]).range([-0.75 * Math.PI, 0.75 * Math.PI])
   var scaleKe = d3.scaleLinear().domain([0, 100]).range([-225, 45])
   console.log(scaleArc(0))
-  var dataSet = 50
+  var dataSet = 0,oldData=0
   //绘制刻度
   var keG = arcG.append('g')
     .attr('class', 'ke')
@@ -100,7 +97,27 @@ window.onload = function () {
      .text( Math.round(dataSet))
      dataG.transition()
      .duration(300)
-     .attr('transform', 'rotate(' + scaleKe(dataSet) + ')')
+     .attrTween('transform', function(){
+      var i = d3.interpolateNumber(oldData,dataSet);
+      return function(t){
+        return 'rotate('+scaleKe(i(t))+')'
+      }
+    })
+     .tween('',
+       function(){
+         console.log('aaa',oldData,dataSet)
+         var i = d3.interpolateNumber(oldData,dataSet);
+         var text;
+         return function(t){
+          console.log(i(t))
+          const d0 = i(t) 
+          console.log('bbb',scaleKe(d0))
+           return 'rotate('+scaleKe(d0)+')'
+         }
+       })
+       .on('end',function(){
+        oldData=dataSet
+       })
   }
   function y2(d, R) {
     return -Math.cos(scaleArc(d)) * R;
