@@ -133,6 +133,11 @@ window.onload = function () {
                 alert('还没有完成,在检查下')
             }
         } else {//新开局
+            for (var index = 1; index < 10; index++) {
+                arry.push(index);
+            }
+            arry[8]=0
+            zeroP = 8
             random()
             redraw()
             repaly = false 
