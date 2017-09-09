@@ -17,7 +17,7 @@ window.onload = function () {
             arry[i] = start
         }
     }
-    random();
+    // random();
     console.log(arry)//
 
 
@@ -48,7 +48,11 @@ window.onload = function () {
             }
             console.log(value)
             console.log(y, map.children[frist].children[y])
-            map.children[frist].children[y].addEventListener('click', click, false)
+            // map.children[frist].children[y].addEventListener('click', click, false)
+            map.children[frist].children[y].children[0].setAttribute('draggable',true)
+            map.children[frist].children[y].children[0].addEventListener('dragstart ',drag,false)
+            map.children[frist].children[y].addEventListener('drop ',drop,false)
+            map.children[frist].children[y].addEventListener('dragover ',allowDrop,false)
             map.children[frist].children[y].setAttribute('i', index)
             map.children[frist].children[y].setAttribute('x', value)
             map.children[frist].children[y].children[0].setAttribute('src', './login_bg_0' + value + '.jpg')
@@ -81,6 +85,20 @@ window.onload = function () {
         return index % 3
     }
     document.getElementById('bt_OK').addEventListener('click', onok, false)
+    // 拖动事件
+
+    function allowDrop(ev)
+    {
+        console.log(this.getAttribute('x'))
+    }
+    function drag(ev)
+    {
+        console.log(this.getAttribute('x'))
+    }
+    function drop(ev)
+    {
+        console.log(this.getAttribute('x'))
+    }
     function onok() {
         var end = true;
         if (!repaly) {

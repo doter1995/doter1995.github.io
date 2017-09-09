@@ -1,0 +1,51 @@
+header{
+    font-size: 2rem;
+    font-weight: 700;
+    color: #696969;
+}
+header div{
+    text-align: center
+}
+#div_map{
+    display: flex;
+    flex-direction: column;
+}
+.map_row{
+    display: inline-flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+.map_row div{
+    width: 33%;
+}
+.map_row img{
+    width: 100%;
+}
+
+.tip div{
+    border-top: 3px dotted #333;
+    margin-top:10px;
+    padding-top: 4px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #C94734;
+    margin-bottom: 1.6rem;
+}
+#bt_OK{
+    margin: 0 auto;
+    text-align: center;
+    width: 70%;
+    padding: 10px 0;
+    font-size: 1.5rem;
+    color: #F4F9B7;
+    border-radius: 7px;
+    box-shadow: -3px 5px 2px #888888;
+    font-weight: 700;
+    inline-size: 1.2;
+    background-color: #FD5B43;
+}
+footer{
+    margin-top:1.4rem;
+}
