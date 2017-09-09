@@ -112,12 +112,15 @@ window.onload = function () {
     document.getElementById('bt_OK').addEventListener('click', onok, false)
     function onok() {
         var end = true;
+        console.log(arry)
         if (!repaly) {
             for (var index = 0; index < 9; index++) {
                 if (index == 8) {
-                    arry[index] != 0
-                    end = false
-                } else if (arry[index] != index + 1) {
+                    if(arry[index] != 0){
+                        end = false
+                    }
+                   
+                } else if (arry[index] != index+1) {
                     end = false
                 }
             }
