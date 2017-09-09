@@ -8,10 +8,39 @@ window.onload = function () {
     }
     arry[8]=0
     var zeroP = 8
-    //随机交换位置
+    //随机生成位置
     function random() {
         for (var index = 0; index < 9; index++) {
-            var i = Math.round(Math.random() * 8)
+            var x = getX(index)
+            var y = getY(index)
+            var i=0;//随机后的位置
+            var ir = Math.round(Math.random() * 4)//随机上下左右
+            if(ir==0){//上移动
+                if(index>2){
+                    i=index-3
+                }else{
+                    i=index+3
+                }
+            }else if(ir==1){//下移动
+                if(index<6){
+                    i=index+3
+                }else{
+                    i=index-3
+                }
+            }else if(ir==2){//左移动
+                if(y!=0){
+                    i=index-1
+                }else{
+                    i=index+1
+                } 
+            }else {//右移动
+                if(y!=2){
+                    i=index+1
+                }else{
+                    i=index-1
+                }  
+            }
+           
             var start = arry[index]
             arry[index] = arry[i]
             arry[i] = start
