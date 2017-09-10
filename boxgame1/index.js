@@ -16,7 +16,7 @@ window.onload = function () {
     //数组中 下标index值+1=value
 
 
-
+    random()
     //拖动事件
     var draged = d3.drag()
         .on('drag', function (d, i) {
