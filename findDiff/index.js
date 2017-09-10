@@ -45,7 +45,7 @@ window.onload = function () {
     var sum = data.tip.length
     d3.select('span#sum').text(sum)
     var svg = d3.selectAll('svg').data(data.dataImg).attr('width', width).attr('height', height / 2)
-
+    
 
     svg.append('image')
         .attr('xlink:href', function (d, i) {
@@ -77,7 +77,8 @@ window.onload = function () {
             return d.h
         })
         .on('click', function (d, i) {
-            console.log('xiu')
+            console.log(d3.event)
+            timer+=5
             data.tip[i].show = true;
             reTip();
         })
@@ -110,10 +111,19 @@ window.onload = function () {
         if (!gameOver) {
             timer--
             d3.select('span#time').text(timer + 'S')
-            d3.select('span#time')
-            .attr('color', timer < 20 ? '#e00' : '#000')
+            d3.select('.time')
+            .style('color', timer < 20 ? '#e00' : '#000')
+        }
+        if(timer<=0){
+            d3.select('span#time').text(timer + 'S')
+            gameOver?null:alert('少年，请集中注意力')
+            gameOver=true;
+            timer=0
+            location.reload()         
         }
     }, 1000)
-
+    svg.on('click',function(){
+        timer-=5
+    })
 }
 
