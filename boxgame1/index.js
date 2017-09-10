@@ -1,79 +1,65 @@
+// import d3 from 'd3'
 window.onload = function () {
-    var map = document.getElementById('div_map')
+    var width = d3.select('#root').style('background-color', '#eee').node().clientWidth
+    var height = window.innerHeight * 0.9
+    console.log(d3.select('#root').node())
+    var svg = d3.select('svg').attr('width', width).attr('height', width)
+    var margin = 5;
+    var itemW = (width - 10) / 3
     var arry = [];
     var repaly = false;
     //初始化数组
     for (var index = 1; index < 10; index++) {
-        arry.push(index);
+        arry.push({value:index,dx:0,dy:0});
     }
-    arry[8]=0
-    var zeroP = 8
-    //随机交换位置
-    function random() {
-        for (var index = 0; index < 9; index++) {
-            var i = Math.round(Math.random() * 8)
-            var start = arry[index]
-            arry[index] = arry[i]
-            arry[i] = start
-        }
-    }
-    // random();
-    console.log(arry)//
+    //数组中 下标index值+1=value
 
-
-    function click() {
-        console.log('aa', this, this.getAttribute('x'))
-        var index = this.getAttribute('i')
-        var value = this.getAttribute('x')
-
-        console.log('index, zeroP', index, zeroP)
-        console.log('', isMove(index, zeroP))
-        //计算是否可移动
-        if (isMove(index, zeroP)) {
-            //数值重绘
-            var start = arry[index]
-            arry[index] = arry[zeroP]
-            arry[zeroP] = start
-            redraw()
-        }
-
-    }
-    function redraw() {
-        for (var index = 0; index < 9; index++) {
-            const value = arry[index]
-            var frist = getY(index);
-            var y = getX(index);
-            if (arry[index] == 0) {
-                zeroP = index
+    //拖动事件
+    var draged = d3.drag()
+        .on('drag', function (d, i) {
+            d.dx += d3.event.dx;
+            d.dy += d3.event.dy;
+            d3.select(this).attr("transform", "translate(" + d.dx + "," + d.dy + ")");
+        }).on('end',function (d, i) {
+            console.log(d)
+            d.dx += d3.event.dx;
+            d.dy += d3.event.dy;
+            console.log(d.dx)
+            //计算移动那个位置
+            
+            if(d.dx>itemW/2){//右移
+                console.log('准备右移动')
+            }else if(-d.dx>itemW/2){//左移
+                console.log('准备左移动')
+            }else if(-d.dy>itemW/2){//上移
+                console.log('准备上移动')
+            }else if(d.dy>itemW/2){//下移
+                console.log('准备下移动')
             }
-            console.log(value)
-            console.log(y, map.children[frist].children[y])
-            // map.children[frist].children[y].addEventListener('click', click, false)
-            map.children[frist].children[y].children[0].setAttribute('draggable',true)
-            map.children[frist].children[y].children[0].addEventListener('dragstart ',drag,false)
-            map.children[frist].children[y].addEventListener('drop ',drop,false)
-            map.children[frist].children[y].addEventListener('dragover ',allowDrop,false)
-            map.children[frist].children[y].setAttribute('i', index)
-            map.children[frist].children[y].setAttribute('x', value)
-            map.children[frist].children[y].children[0].setAttribute('src', './login_bg_0' + value + '.jpg')
-        }
-    }
-    redraw()
+            d3.select(this).attr("transform", "translate(" + d.dx + "," + d.dy + ")");
+        })
+    var nodes = svg
+        .selectAll('g')
+        .data(arry)
+        .enter()
+        .append('g')
+        .call(draged)
+    nodes.append('image')
+        .attr('xlink:href', function (d, i) {
+            return './login_bg_0' + d.value + '.jpg'
+        })
+        .attr('x', function (d, i) {
+            var index = getX(i);
+            return index * itemW + index * margin
+        })
+        .attr('y', function (d, i) {
+            var index = getY(i);
+            return index * itemW + index * margin
+        })
+        .attr('width', itemW)
+        .attr('height', itemW)
+        
 
-    function isMove(index, zeroP) {
-        if (index == zeroP) return false;
-        var ix = getX(index)
-        var iy = getY(index)
-        var zx = getX(zeroP)
-        var zy = getY(zeroP)
-        //是否在同一纵轴
-        if (ix == zx) {
-            if (Math.abs(iy - zy) == 1) return true
-        } else if (iy == zy) { //是否在同一横轴
-            if (Math.abs(ix - zx) == 1) return true
-        }
-        return false
-    }
     function getY(index) {
         var frist = 0;
         if (index > 2) {
@@ -83,47 +69,5 @@ window.onload = function () {
     }
     function getX(index) {
         return index % 3
-    }
-    document.getElementById('bt_OK').addEventListener('click', onok, false)
-    // 拖动事件
-
-    function allowDrop(ev)
-    {
-        console.log(this.getAttribute('x'))
-    }
-    function drag(ev)
-    {
-        console.log(this.getAttribute('x'))
-    }
-    function drop(ev)
-    {
-        console.log(this.getAttribute('x'))
-    }
-    function onok() {
-        var end = true;
-        if (!repaly) {
-            for (var index = 0; index < 9; index++) {
-                if (index == 8) {
-                    arry[index] != 0
-                    end = false
-                } else if (arry[index] != index + 1) {
-                    end = false
-                }
-            }
-
-            if (end) {
-                alert('恭喜你')
-                document.getElementById('bt_OK').firstChild.nodeValue = '再来一局'
-                repaly = true;
-            } else {
-                alert('还没有完成,在检查下')
-            }
-        } else {//新开局
-            random()
-            redraw()
-            repaly = false 
-            document.getElementById('bt_OK').firstChild.nodeValue = '完成'
-        }
-
     }
 }

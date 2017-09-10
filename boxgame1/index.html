@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../d3/d3.min.js"></script>
     <link rel="stylesheet" href="./index.css">
     <script src="./index.js"></script>
     <title>九宫格拼图游戏</title>
@@ -17,24 +18,8 @@
     <section class="tip">
         <div>城市源动力</div>
     </section>
-    <section>
-        <div id="div_map">
-            <div class="map_row">
-                <div><img src="./login_bg_01.jpg"></div>
-                <div><img src="./login_bg_02.jpg"></div>
-                <div><img src="./login_bg_03.jpg"></div>
-            </div>
-            <div class="map_row">
-                <div><img src="./login_bg_04.jpg"></div>
-                <div><img src="./login_bg_05.jpg"></div>
-                <div><img src="./login_bg_06.jpg"></div>
-            </div>
-            <div class="map_row">
-                <div><img src="./login_bg_07.jpg"></div>
-                <div><img src="./login_bg_08.jpg"></div>
-                <div><img src="./login_bg_00.jpg"></div>
-            </div>
-        </div>
+    <section id='root'>
+       <svg ></svg>
     </section>
     <footer>
         <div id="bt_OK" onclick="onOk()">完成</div>
