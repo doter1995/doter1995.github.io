@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#root{
+    margin: 0  10px;
+    display: flex;
+    flex-direction: column;
+}
+#root img{
+    width: 100%;
+    min-height: 200px;
+    max-height: 300px;
+}
+header div{
+    width: 100%;
+    text-align: center;
+    color: #555;
+    font-size: 2rem;
+    font-weight: 700;
+    padding-bottom: 10px;
+    border-bottom: 3px dotted #333;
+    margin-bottom: 10px;
+}
+footer{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+footer div{
+    width: 100%;
+    text-align: center;
+    font-size: 1.3rem;
+    line-height: 1.5;
+}
+footer div:last-child{
+    margin-bottom: 15px;
+}
