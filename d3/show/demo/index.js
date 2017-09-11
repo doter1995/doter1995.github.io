@@ -19,7 +19,7 @@ window.onload = function () {
     //构建数据
     var dataSet = [
         {
-            id: null,
+            id: null, // 用来定义渐变标签id，uuid生成，
             name: 'bb',
             h: 1.5,
             date0: '20161201 08:30:00',
@@ -81,9 +81,10 @@ window.onload = function () {
         .domain([0, 100])
         .range([W / 4, W / 4 * 3])
 
-    //构建一个线性样式
+    //构建一个线性插值器
     var interColor =d3.interpolateRgb("#00ab5d", "#fda700")
     console.log() 
+    //构建一个线性样式
     var defs = svg.append("defs");
 
     var linearGradient = defs.append("linearGradient")
@@ -99,8 +100,8 @@ window.onload = function () {
     var stop2 = linearGradient.append("stop")
         .attr("offset", "100%")
         .style("stop-color", interColor(1));
+    //构建渐变色方法 
     function addColor(select, startC, endC) {
-        console.log(select)
         var id = guid()
         var linearGradient = d3.select(select).append("defs")
             .append("linearGradient")
@@ -116,9 +117,9 @@ window.onload = function () {
             .attr("offset", "100%")
             .style("stop-color", endC);
         console.log(id)
-        return id;
+        return id;//返回给d.id 用于在rect中使用
     }
-    // 构建背景色
+    // 构建背景色(便于背景色调整)
     var backG = svg.append('g')
         .attr('class', 'backG')
         .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')')
@@ -131,7 +132,7 @@ window.onload = function () {
         .attr('width', W)
         .attr('height', function (d, i) { return Y(d.start) - Y(d.end) })
         .attr('fill', function (d, i) { return d.color })
-    //构建基础图形
+    //构建基础图形(三个轴)
     var YaxisG = svg.append('g')
         .attr('class', 'YaxisG')
         .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')')
@@ -155,9 +156,11 @@ window.onload = function () {
         .enter()
         .append('g')
         .attr('class', 'line')
+    //构建标签，设置id
     line.each(function(d,i){
         d.id=addColor(this, interColor(d.data0/100), interColor(d.data1/100))
     })
+    //绘制
     line.append('rect')
         .attr("x", function (d, i) { return X(parseDate(d.date0)) })
         .attr("width", function (d, i) {console.log(X(parseDate(d.date1))-X(parseDate(d.date0))); return X(parseDate(d.date1))-X(parseDate(d.date0))})
@@ -166,6 +169,6 @@ window.onload = function () {
         .attr('fill', function (d, i) {
             return "url(#" + d.id + ")"
         })
-    //指定缩放
+    //指定缩放(待续)
    
 }
