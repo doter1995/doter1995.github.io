@@ -2,6 +2,32 @@
     margin: 0;
     padding: 0;
 }
+text{
+    user-select: none;
+}
 #root{
     display: flex;
+}
+#div_tip{
+    width: 200px;
+    position: absolute;
+    padding: 10px;
+    font-size: .4rem;
+    top:-800px;
+    left:-220px;
+    color: #eee;
+    background-color: #666;
+    border:solid 1px #666;
+    border-radius: 5px;
+}
+#div_tip:after{
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 10%;
+    width: 0;
+    height: 0;
+    border-bottom: 12px solid #666;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
 }
