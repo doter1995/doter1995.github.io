@@ -187,13 +187,13 @@ window.onload = function () {
             index: 0,
             data0: domain[1],
             data1: data.value,
-            color: data.color[1]
+            color: data.color[0]
           })
           dataSet.push({
             index: 1,
             data0: data.value,
             data1: domain[0],
-            color: data.color[0]
+            color: data.color[1]
           })
         }
       } else if (config.background.type == 1) {
