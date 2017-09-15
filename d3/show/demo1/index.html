@@ -21,31 +21,30 @@
         <div>能量大小：80</div>
     </div>
     <section id='root'></section>
-    <section id='Config'>
+    <section id='color_Config'>
         <div>类型:
-            <select>
-                <option>1.两端</option>
-                <option>2.交叉</option>
+            <select id='color_type'>
+                <option value="0" >1.两端</option>
+                <option value="1">2.交叉</option>
             </select>
         </div>
-        <div>
+        <div id='color1'>
             <div>中间值：<input type="number"></input>
             </div>
             <div>上色：<input></input>
             </div>
             <div>下色：<input></input>
             </div>
-            <div><button>确定</button><button>取消</button></div>
         </div>
-        <div>
+        <div id='color2'>
             <div>间隔值：<input type="number"></input>
             </div>
             <div>上色：<input></input>
             </div>
             <div>上色：<input></input>
             </div>
-            <div><button>确定</button><button>取消</button></div>
         </div>
+        <div><button id='color_ok'>确定</button><button id='color_cancel'>取消</button></div>
     </section>
 </body>
 
