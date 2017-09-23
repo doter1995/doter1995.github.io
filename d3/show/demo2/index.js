@@ -21,7 +21,7 @@ window.onload = function () {
       id: null, // 用来定义渐变标签id，uuid生成，
       name: 'bb',
       h: 1.7,
-      date0: '20160901 08:30:00',
+      date0: '20160901 08:30:00',  
       data0: 20,
       date1: '20161201 20:30:00',
       data1: 80

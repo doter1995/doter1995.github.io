@@ -17,6 +17,7 @@ function Widget(config) {
     var width = config.width ? config.width - 15 : 10
     var height = config.height ? config.height - 45 : 10
     var onLineSelected = config.onLineSelected ? config.onLineSelected : function () { alert('请加入点击事件') }
+    var yUnit = config.yUnit ? config.yUnit : 'M'
     /**
      * 私有属性
      */
@@ -128,10 +129,10 @@ function Widget(config) {
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
-            .text(function (d, i) { return d.data[0] + '米' })
+            .text(function (d, i) { return d.data[0] + yUnit })
             .attr('class', 'text1')
             .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0]) - 10) + ')' })
-        yrect.append('text').text(function (d, i) { return d.data[1] + '米' })
+        yrect.append('text').text(function (d, i) { return d.data[1] + yUnit })
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
@@ -168,7 +169,7 @@ function Widget(config) {
                     height
                 ]
             ])
-            .on("zoom", function () { zoomed() });
+            .on("zoom", zoomed);
 
         //添加线条
         _Lines = _svg
@@ -179,31 +180,31 @@ function Widget(config) {
             .append('g')
             .attr('class', 'lines')
         _Lines.selectAll('line')
-            .data(lines)
+            .data(formatLine(_Ymain,lines))
             .enter()
             .append('line')
             .attr('class', 'line')
             .filter(function (d, i) {
-                return GetYvalue(_Ymain, d[0]) != -1
+                return d.rangeY!=-1
             })
             .attr('x1', function (d, i) {
-                return _X(parseDate(d[1]))
+                return _X(parseDate(d.data[1]))
             })
             .attr('y1', function (d, i) {
-                return _Ymain.Y(GetYvalue(_Ymain, d[0]))
+                return _Ymain.Y(d.rangeY)
             })
             .attr('x2', function (d, i) {
-                return _X(parseDate(d[2]))
+                return _X(parseDate(d.data[2]))
             })
             .attr('y2', function (d) {
-                return _Ymain.Y(GetYvalue(_Ymain, d[0]))
+                return _Ymain.Y(d.rangeY)
             })
             .attr('stroke', '#e3e')
-            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d) })
+            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
         //设置room
         _zoomRoot.call(zoom)
-        _Lines.call(zoom)
-        _bg.call(zoom)
+        // _Lines.call(zoom)
+        // _bg.call(zoom)
     }
     function zoomed() {
         // console.log(d3.event)
@@ -229,6 +230,20 @@ function Widget(config) {
         console.log('x')
         _xz = xz
         _yz = _Ymain.Y
+
+        _Lines.selectAll('line.line')
+            .attr('x1', function (d, i) {
+                return _xz(parseDate(d.data[1]))
+            })
+            .attr('y1', function (d, i) {
+                return _Ymain.Y(d.rangeY)
+            })
+            .attr('x2', function (d, i) {
+                return _xz(parseDate(d.data[2]))
+            })
+            .attr('y2', function (d) {
+                return _Ymain.Y(d.rangeY)
+            })
         _xAxis.call(XA.scale(_xz))
         //控制x轴
         //更新 x和Y轴
@@ -236,35 +251,15 @@ function Widget(config) {
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
-            .text(function (d, i) { return d.data[0] + '米' })
+            .text(function (d, i) { return d.data[0] + yUnit })
             .transition()
             .attr('transform', function (d, i) { return 'translate(-15,' + (_yz(d.range[0]) - 10) + ')' })
         _yAxis.selectAll('g.ys').select('text.text2')
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
-            .text(function (d, i) { return d.data[1] + '米' })
+            .text(function (d, i) { return d.data[1] + yUnit })
             .transition().attr('transform', function (d, i) { return 'translate(-15,' + (_yz(d.range[1]) + 15) + ')' })
-        _Lines.selectAll('line.line')
-            .transition()
-            .attr('x1', function (d, i) {
-                var x = _xz(parseDate(d[1]))
-                // x = x<-1000?-1000:x>(W+1000)?(W+1000):x
-                return x
-            })
-            .attr('y1', function (d, i) {
-                // 
-                return _yz(GetYvalue(_Ymain, d[0]))
-            })
-            .attr('x2', function (d, i) {
-                var x1 = _xz(parseDate(d[2]))
-                // x1=x1<-1000?-1000:x1>(W+1000)?(W+1000):x1
-                return x1
-            })
-            .attr('y2', function (d, i) {
-                return _yz(GetYvalue(_Ymain, d[0]))
-            })
-
         // d3.select('g.yAxis').call(d3.axisLeft().scale(yz))
         //更新背景色
         _bg.selectAll('rect')
@@ -280,7 +275,15 @@ function Widget(config) {
                 return d.data[2]
             })
     }
-
+    function setZoomlisent(x, y) {
+        zoomRoot.on('mousemove', function (d) {
+            var mouse = d3.mouse(this);
+            mouse[0] = mouse[0] - marginLeft
+            mouse[1] = mouse[1] - marginTop
+            tipX.transition().duration(10).attr('x1', mouse[0]).attr('x2', mouse[0])
+            tipY.transition().duration(10).attr('y1', mouse[1]).attr('y2', mouse[1])
+        })
+    }
 
 
     this.reRender = function (config) {
@@ -294,8 +297,8 @@ function Widget(config) {
             .attr('width', width)
             .attr('height', height)
             .select('g')
-       
-         _svg
+
+        _svg
             .select('g.xAxis')
             .transition()
             .attr('transform', 'translate(0,' + H + ')')
@@ -355,13 +358,13 @@ function Widget(config) {
             .enter()
             .append('g')
             .attr('class', 'ys')
-        yrect.append('text').text(function (d, i) { return d.data[0] + '米' })
+        yrect.append('text').text(function (d, i) { return d.data[0] + yUnit })
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .attr('class', 'text1')
             .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0]) - 10) + ')' })
-        yrect.append('text').text(function (d, i) { return d.data[1] + '米' })
+        yrect.append('text').text(function (d, i) { return d.data[1] + yUnit })
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
@@ -385,25 +388,19 @@ function Widget(config) {
             .append('line')
             .attr('class', 'line')
             .filter(function (d, i) {
-                console.log('aaaa', d, GetYvalue(_Ymain, d[0]))
-                return GetYvalue(_Ymain, d[0]) != -1
+                return d.rangeY!=-1
             })
             .attr('x1', function (d, i) {
-                var x = _X(parseDate(d[1]))
-                // x= x<-1000?-1000:x>(W+1000)?(W+1000):x
-                return x
+                return _X(parseDate(d.data[1]))
             })
             .attr('y1', function (d, i) {
-                // 
-                return _Ymain.Y(GetYvalue(_Ymain, d[0]))
+                return _Ymain.Y(d.rangeY)
             })
             .attr('x2', function (d, i) {
-                var x1 = _X(parseDate(d[2]))
-                // x1=x1<-1000?-1000:x1>(W+1000)?(W+1000):x1
-                return x1
+                return _X(parseDate(d.data[2]))
             })
-            .attr('y2', function (d, i) {
-                return _Ymain.Y(GetYvalue(_Ymain, d[0]))
+            .attr('y2', function (d) {
+                return _Ymain.Y(d.rangeY)
             })
             .attr('stroke-width', 4)
             .attr('stroke', '#e3e')
@@ -453,6 +450,43 @@ function Widget(config) {
         if (config.colorMap != undefined) {
             colorMap = config.colorMap
             //todo:更新z轴，及伪彩图
+        }
+        if (config.yAxisVisible != undefined) {
+            config.map(function (d, i) {
+                yAxis[d.index].visible = d.visible
+            })
+        }
+        if (config.attrOpts != undefined) {
+            attrOpts = config.attrOpts
+            //
+        }
+        if (config.onLineSelected != undefined) {
+            onLineSelected = config.onLineSelected
+            //线的点击事件
+        }
+        if (config.onRightAttrClick != undefined) {
+            onRightAttrClick = config.onRightAttrClick
+            //有标签的点击事件
+        }
+        if (config.hoverSelectOffset != undefined) {
+            hoverSelectOffset = config.hoverSelectOffset
+            //
+        }
+        if (config.makeInfo != undefined) {
+            makeInfo = config.makeInfo
+            //
+        }
+        if (config.leftAttrInfo != undefined) {
+            leftAttrInfo = config.leftAttrInfo
+            //
+        }
+        if (config.rightAttrInfo != undefined) {
+            rightAttrInfo = config.rightAttrInfo
+            //
+        }
+        if (config.yUnit != undefined) {
+            yUnit = config.yUnit
+            //
         }
         this.reRender(config)
     }
@@ -521,19 +555,15 @@ function Widget(config) {
         //解析,数据重构
         yAxis.map(function (d, i) {
             var lest = yMain.ylength
-            yMain.ylength += (d[1] - d[0])
-            yMain.data.push({
-                data: d,
-                range: [lest, yMain.ylength]
-            })
+            if (d[3].visible != false) {
+                yMain.ylength += (d[1] - d[0])
+                yMain.data.push({
+                    data: d,
+                    range: [lest, yMain.ylength]
+                })
+            }
         })
         yMain.Y = d3.scaleLinear().domain([0, yMain.ylength]).range([H, 0])
-        yMain.data.map(function (d, i) {
-            var lest;
-            yMain.y.push(
-                d3.scaleLinear().domain(d.data).range([yMain.Y(d.range[0]), yMain.Y(d.range[1])])
-            )
-        })
         console.log(yMain)
         return yMain
     }
@@ -551,6 +581,19 @@ function Widget(config) {
         })
         return data;
     }
+    //将线段在原始阶段处理
+    function formatLine(yMain,line){
+        var lines = []
+        line.map(function(d,i){
+            lines.push({
+                data:d,
+                rangeY:GetYvalue(yMain,d[0])
+            })
+        })
+        return lines
+    }
+
+
     var self = this
 
 }
