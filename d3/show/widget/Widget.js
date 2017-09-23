@@ -1,5 +1,5 @@
 function Widget(config) {
-   
+
     //标题
     var title = config.title
     //挂载点
@@ -14,8 +14,8 @@ function Widget(config) {
     var lines = config.lines ? config.lines : []
     //色条接口  
     var colorMap = config.colorMap ? config.colorMap : []
-    var width = config.width ? config.width : 10
-    var height = config.height ? config.height - 40 : 10
+    var width = config.width ? config.width - 15 : 10
+    var height = config.height ? config.height - 45 : 10
     var onLineSelected = config.onLineSelected ? config.onLineSelected : function () { alert('请加入点击事件') }
     /**
      * 私有属性
@@ -23,9 +23,9 @@ function Widget(config) {
     //基础属性
     var _title;
     var _marginLeft = 25
-    var _marginRight = 10
-    var _marginTop = 10
-    var _marginBottom = 15
+    var _marginRight = 25
+    var _marginTop = 25
+    var _marginBottom = 25
     var _svg
     //图表属性
     var _xAxis
@@ -42,35 +42,41 @@ function Widget(config) {
     var _xz
     var _yz
     var _zz
+    var trueF = null;
+    var zoom
     console.log('tiske', (width / 100).toFixed(0))
     // 日期格式化
     var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
     var formatDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
     var ticks = (width / 100).toFixed(0)
+
+    var W = width - _marginLeft - _marginRight
+    var H = height - _marginBottom - _marginTop
+    console.log((W / 100).toFixed(0))
     var XA = d3.axisBottom()
         .tickFormat(function (d) { return formatDate(d) })
     //初始化渲染
     this.render = function () {
 
-        var W = width - _marginLeft - _marginRight
-        var H = height - _marginBottom - _marginTop
+
         //颜色插值器
         var interColor = d3.interpolateRgb(colorMap[0][1], colorMap[colorMap.length - 1][1])
-
+        console.log(node)
         _title = node
             .append('div')
             .attr('class', 'widget_node')
+            .style('width', width + 'px')
             .html(title)
         _svg = node.append('svg')
             .attr('class', 'root')
             .attr('width', width)
             .attr('height', height)
             .append('g')
-            .attr('transform', 'translate(' + _marginLeft + ',' + _marginTop / 2 + ')')
+            .attr('transform', 'translate(' + _marginLeft + ',' + _marginTop + ')')
         _zAxis = _svg
             .append('g')
             .attr('class', 'zAxis')
-
+            .attr('transform', 'translate(0,' + -25 + ')')
         _xAxis = _svg
             .append('g')
             .attr('class', 'xAxis')
@@ -82,19 +88,15 @@ function Widget(config) {
         _X = d3.scaleTime()
             .domain([parseDate(xAxis[0]), parseDate(xAxis[1])])
             .range([0, W])
-        var X = _X
         _Z = d3.scaleLinear()
             .domain([0, 100])
             .range([W / 4, W / 4 * 3])
-        var Z = _Z
         _zAxis.call(d3.axisBottom().scale(_Z))
         _zAxis.select('path').attr('stroke', "url(#" + addColor(_zAxis.node(), interColor, 0, 100) + ")").attr('stroke-width', 10);
         _zAxis.selectAll('g.tick').select('line').attr('stroke', 'none');
         _xAxis.call(XA.scale(_X))
-        var _Ymain = formatY(yAxis, H);
-        console.log('_Ymain', _Ymain)
-        _Ymain = _Ymain
-        var Y = _Ymain.Y
+        _Ymain = formatY(yAxis, H);
+        Y = _Ymain.Y
         //添加背景色
         _bg = _svg
             .append('svg')
@@ -107,30 +109,35 @@ function Widget(config) {
             .append('rect')
             .attr('x', 0)
             .attr('y', function (d, i) {
-                console.log(_Ymain)
-                return _Ymain.Y(d.range[1])
+                return Y(d.range[1])
             })
             .attr('width', W)
             .attr('height', function (d, i) {
-                return _Ymain.Y(d.range[0]) - _Ymain.Y(d.range[1])
+                return Y(d.range[0]) - Y(d.range[1])
             })
             .attr('fill', function (d, i) {
                 return d.data[2]
             })
         //添加y轴
-        _yAxis.selectAll('g')
+        var yrect = _yAxis.selectAll('g')
             .data(_Ymain.data)
             .enter()
             .append('g')
             .attr('class', 'ys')
-            .each(function (d, i) {
-                d3.select(this).append('text').text(d.data[0] + '米')
-                    .attr('class', 'text1')
-                    .attr('transform', 'translate(-25,' + (Y(d.range[0]) - 10) + ')')
-                d3.select(this).append('text').text(d.data[1] + '米')
-                    .attr('class', 'text2')
-                    .attr('transform', 'translate(-25,' + (Y(d.range[1]) + 15) + ')')
-            })
+        yrect.append('text')
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .text(function (d, i) { return d.data[0] + '米' })
+            .attr('class', 'text1')
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0]) - 10) + ')' })
+        yrect.append('text').text(function (d, i) { return d.data[1] + '米' })
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .attr('class', 'text2')
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 15) + ')' })
+
 
         //添加线条
         _zoomRoot = _svg.append('g')
@@ -142,104 +149,132 @@ function Widget(config) {
             .attr('y', _marginTop)
             .attr('width', W)
             .attr('height', H)
+
         //指定缩放
-        var zoom = d3
+        var xdomain = _X.domain()
+        var length = xdomain[1] - xdomain[0]
+        console.log('xdom', length / (1000))
+        zoom = d3
             .zoom()
             .scaleExtent([
-                1 / 9,
-                9
+                1 / 2,
+                (length / (1000 * ((width / 130).toFixed(0))))
             ])
             .translateExtent([
-                [-width, -Infinity
+                [-width, 0
                 ],
                 [
                     2 * width,
-                    Infinity
+                    height
                 ]
             ])
-            .on("zoom", function () { zoomed(X, _Ymain) });
-        //设置room
-        _zoomRoot.call(zoom)
+            .on("zoom", function () { zoomed() });
+
         //添加线条
         _Lines = _svg
             .append('svg')
+            .attr('class', 'lines')
             .attr('width', W)
             .attr('height', H)
             .append('g')
             .attr('class', 'lines')
-        _Lines.selectAll('rect')
+        _Lines.selectAll('line')
             .data(lines)
             .enter()
-            .append('rect')
+            .append('line')
             .attr('class', 'line')
-            .attr('x', function (d, i) {
-                return X(parseDate(d[2]))
+            .filter(function (d, i) {
+                return GetYvalue(_Ymain, d[0]) != -1
             })
-            .attr('y', function (d, i) {
-                // 
-                console.log(GetYvalue(_Ymain, d[0]))
+            .attr('x1', function (d, i) {
+                return _X(parseDate(d[1]))
+            })
+            .attr('y1', function (d, i) {
                 return _Ymain.Y(GetYvalue(_Ymain, d[0]))
             })
-            .attr('width', function (d, i) {
-                return X(parseDate(d[2])) - X(parseDate(d[1]))
+            .attr('x2', function (d, i) {
+                return _X(parseDate(d[2]))
             })
-            .attr('height', 4)
-            .attr('fill', '#e3e')
-            .on('click', function (d, i) { self.onLineSelected(d3.select(this), d3.event, d) })
+            .attr('y2', function (d) {
+                return _Ymain.Y(GetYvalue(_Ymain, d[0]))
+            })
+            .attr('stroke', '#e3e')
+            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d) })
+        //设置room
+        _zoomRoot.call(zoom)
+        _Lines.call(zoom)
+        _bg.call(zoom)
     }
-    function zoomed(X, _Ymain) {
-        console.log()
+    function zoomed() {
+        // console.log(d3.event)
         // 构建新X比例尺
         var xz = d3
             .event
             .transform
-            .rescaleX(X);
+            .rescaleX(_X);
         // 构建新Y比例尺
         var yz = d3
             .event
             .transform
             .rescaleY(_Ymain.Y);
-        console.log(d3
-            .event
-            .transform)
-        var ys = yz.domain() 
+
+        var ys = yz.domain()
+        var xs = xz.domain()
+        console.log("ys", ys[0])
+        console.log("ys", d3.event)
         //控制y轴
-        if(ys[0]<0){
-            yz.domain([0,(ys[1]+Math.abs(ys[0]))])
-        }
+        // if (ys[0] < 0) {
+        //     yz.domain([0, (ys[1] + Math.abs(ys[0]))])
+        // }
+        console.log('x')
+        _xz = xz
+        _yz = _Ymain.Y
+        _xAxis.call(XA.scale(_xz))
         //控制x轴
-        console.log(yz.domain())
         //更新 x和Y轴
-        d3.selectAll('g.ys')
-            .each(function (d, i) {
-                d3.select(this).select('text.text1').transition().text(d.data[0] + '米')
-                    .attr('transform', 'translate(-25,' + (yz(d.range[0]) - 10) + ')')
-                d3.select(this).select('text.text2').transition().text(d.data[1] + '米')
-                    .attr('transform', 'translate(-25,' + (yz(d.range[1]) + 15) + ')')
-            })
-        d3.select('g.lines').selectAll('rect')
+        _yAxis.selectAll('g.ys').select('text.text1')
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .text(function (d, i) { return d.data[0] + '米' })
             .transition()
-            .attr('x', function (d, i) {
-                return xz(parseDate(d[1]))
+            .attr('transform', function (d, i) { return 'translate(-15,' + (_yz(d.range[0]) - 10) + ')' })
+        _yAxis.selectAll('g.ys').select('text.text2')
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .text(function (d, i) { return d.data[1] + '米' })
+            .transition().attr('transform', function (d, i) { return 'translate(-15,' + (_yz(d.range[1]) + 15) + ')' })
+        _Lines.selectAll('line.line')
+            .transition()
+            .attr('x1', function (d, i) {
+                var x = _xz(parseDate(d[1]))
+                // x = x<-1000?-1000:x>(W+1000)?(W+1000):x
+                return x
             })
-            .attr('y', function (d, i) {
+            .attr('y1', function (d, i) {
                 // 
-                return yz(GetYvalue(_Ymain, d[0]))
+                return _yz(GetYvalue(_Ymain, d[0]))
             })
-            .attr('width', function (d, i) {
-                return xz(parseDate(d[2])) - xz(parseDate(d[1]))
+            .attr('x2', function (d, i) {
+                var x1 = _xz(parseDate(d[2]))
+                // x1=x1<-1000?-1000:x1>(W+1000)?(W+1000):x1
+                return x1
             })
-        d3.select('g.xAxis').call(XA.scale(xz))
+            .attr('y2', function (d, i) {
+                return _yz(GetYvalue(_Ymain, d[0]))
+            })
+
         // d3.select('g.yAxis').call(d3.axisLeft().scale(yz))
         //更新背景色
-        d3.select('.bg').selectAll('rect')
+        _bg.selectAll('rect')
             .transition()
             .attr('y', function (d, i) {
                 console.log(_Ymain)
-                return yz(d.range[1])
+                return _yz(d.range[1])
             })
             .attr('height', function (d, i) {
-                return yz(d.range[0]) - yz(d.range[1])
+                return _yz(d.range[0]) - _yz(d.range[1])
             })
             .attr('fill', function (d, i) {
                 return d.data[2]
@@ -248,79 +283,147 @@ function Widget(config) {
 
 
 
-    var reRender = function (config) {
-        var self = this
+    this.reRender = function (config) {
+        _title.style('width', width + 'px').html(title)
         //标题已处理,忽略标题
-        //更新新X
-        var W = width - _marginLeft - _marginRight
-        var H = height - _marginBottom - _marginTop
-        var X = d3.scaleTime()
+        //颜色插值器
+        var interColor = d3.interpolateRgb(colorMap[0][1], colorMap[colorMap.length - 1][1])
+        W = width - _marginLeft - _marginRight
+        H = height - _marginBottom - _marginTop
+        _svg = node.select('svg.root')
+            .attr('width', width)
+            .attr('height', height)
+            .select('g')
+       
+         _svg
+            .select('g.xAxis')
+            .transition()
+            .attr('transform', 'translate(0,' + H + ')')
+
+        _X = d3.scaleTime()
             .domain([parseDate(xAxis[0]), parseDate(xAxis[1])])
             .range([0, W])
-        _X = X
-        var _Ymain = formatY(yAxis, H);
-        _Ymain = _Ymain
+        _Z = d3.scaleLinear()
+            .domain([0, 100])
+            .range([W / 4, W / 4 * 3])
+        _zAxis.call(d3.axisBottom().scale(_Z))
+        //此处可以判断是否发生颜色变化，或者直接删除原有渐变色
+        _zAxis.select('path').attr('stroke', "url(#" + addColor(_zAxis.node(), interColor, 0, 100) + ")").attr('stroke-width', 10);
+        _zAxis.selectAll('g.tick').select('line').attr('stroke', 'none');
+
+        var xdomain = _X.domain()
+        var length = xdomain[1] - xdomain[0]
+        console.log('xdom', length / (1000))
+        zoom = zoom
+            .scaleExtent([
+                1 / 2,
+                (length / (1000 * ((width / 130).toFixed(0))))
+            ])
+
+
+        _xAxis.call(XA.scale(_X))
+        _Ymain = formatY(yAxis, H);
+        console.log(yAxis, _Ymain)
+        console.log(W)
         var Y = _Ymain.Y
-
-        //更新x轴
-
-        d3.select('g.xAxis').call(XA.scale(X))
-        d3.select('g.yAxis').call(d3.axisLeft().scale(Y))
-        //更新背景色
-        //更新背景色
-
-        var bg = d3.select('.bg').selectAll('rect')
+        console.log(_Ymain.Y(3))
+        //添加背景色
+        _bg = _svg
+            .select('svg.bg')
+            .attr('width', W)
+            .attr('height', H)
+        _bg.selectAll('rect').remove()
+        var bg = _bg.selectAll('rect')
             .data(_Ymain.data)
-        console.log(_Ymain.data, bg)
-        bg.exit().remove();
         bg.enter()
             .append('rect')
-            .merge(bg)
+            .attr('x', 0)
             .attr('y', function (d, i) {
-                console.log(_Ymain)
-                return Y(d.range[1])
+                return _Ymain.Y(d.range[1])
             })
+            .attr('width', W)
             .attr('height', function (d, i) {
-                return Y(d.range[0]) - Y(d.range[1])
+                return _Ymain.Y(d.range[0]) - _Ymain.Y(d.range[1])
             })
             .attr('fill', function (d, i) {
                 return d.data[2]
             })
-        //更新line
+        //添加y轴
+        _yAxis.selectAll('g').remove()
+        var yrect = _yAxis.selectAll('g')
+            .data(_Ymain.data)
+            .enter()
+            .append('g')
+            .attr('class', 'ys')
+        yrect.append('text').text(function (d, i) { return d.data[0] + '米' })
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .attr('class', 'text1')
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0]) - 10) + ')' })
+        yrect.append('text').text(function (d, i) { return d.data[1] + '米' })
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .attr('class', 'text2')
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 15) + ')' })
 
-        var lines = d3.select('g.lines').selectAll('rect')
+        //添加线条
+        _zoomRoot
+            .attr('width', W)
+            .attr('height', H)
+        //添加线条
+        _Lines = _svg
+            .select('svg.lines')
+            .attr('width', W)
+            .attr('height', H)
+            .select('g')
+        _Lines.selectAll('line').remove()
+        _Lines.selectAll('line')
             .data(lines)
-        lines.exit().remove()
-        var onLineSelected = onLineSelected
-        lines.enter().append('rect')
-            .merge(lines)
-            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d) })
-            .transition()
-            .attr('x', function (d, i) {
-                return X(parseDate(d[1]))
+            .enter()
+            .append('line')
+            .attr('class', 'line')
+            .filter(function (d, i) {
+                console.log('aaaa', d, GetYvalue(_Ymain, d[0]))
+                return GetYvalue(_Ymain, d[0]) != -1
             })
-            .attr('y', function (d, i) {
+            .attr('x1', function (d, i) {
+                var x = _X(parseDate(d[1]))
+                // x= x<-1000?-1000:x>(W+1000)?(W+1000):x
+                return x
+            })
+            .attr('y1', function (d, i) {
                 // 
-                console.log('ddd', d[0], GetYvalue(_Ymain, d[0]), _Ymain.Y(GetYvalue(_Ymain, d[0])))
                 return _Ymain.Y(GetYvalue(_Ymain, d[0]))
             })
-            .attr('width', function (d, i) {
-                return X(parseDate(d[2])) - X(parseDate(d[1]))
+            .attr('x2', function (d, i) {
+                var x1 = _X(parseDate(d[2]))
+                // x1=x1<-1000?-1000:x1>(W+1000)?(W+1000):x1
+                return x1
             })
-            .attr('height', 4)
-            .attr('fill', '#e3e')
+            .attr('y2', function (d, i) {
+                return _Ymain.Y(GetYvalue(_Ymain, d[0]))
+            })
+            .attr('stroke-width', 4)
+            .attr('stroke', '#e3e')
+            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d) })
 
-        _zoomRoot.on("zoom", function () { zoomed(X, _Ymain) });
+        _zoomRoot.on("zoom", function () { zoomed() });
+        _zoomRoot.call(zoom)
+        _Lines.call(zoom)
+        _bg.call(zoom)
     }
 
 
-    var updateOptions = function (config) {
-        if (config.width != undefined && config.height != undefined)
-            d3.select('svg.root').attr('viewBox', '0 0 ' + config.width + ' ' + config.height)
+    this.updateOptions = function (config) {
+        if (config.width != undefined && config.height != undefined) {
+            width = config.width - 15
+            height = config.height - 45
+        }
         if (config.title != undefined) {
             console.log('aa', self)
             title = config.title
-            setTitle(config.title)
         }
         if (config.xAxis != undefined) {
             xAxis = config.xAxis
@@ -351,12 +454,9 @@ function Widget(config) {
             colorMap = config.colorMap
             //todo:更新z轴，及伪彩图
         }
-        console.log(lines)
-        self.reRender(config)
+        this.reRender(config)
     }
-    function setTitle(title) {
-        d3.select('.widget_node').html(title)
-    }
+
 
 
 
@@ -446,7 +546,7 @@ function Widget(config) {
                 //属于该对象
                 console.log(V - d.data[0] + d.range[0])
                 data = V - d.data[0] + d.range[0]
-                return;
+                return data;
             }
         })
         return data;
