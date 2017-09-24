@@ -54,7 +54,7 @@ window.onload = function () {
         yUnit:'米',
 
     }
-    widget = new Widget(config)
+    widget = new MQVisWidget(config)
     widget.render()
     var config1 = config
     config1.node='#root1'

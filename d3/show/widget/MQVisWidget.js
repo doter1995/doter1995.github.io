@@ -1,4 +1,4 @@
-function Widget(config) {
+function MQVisWidget(config) {
 
     //标题
     var title = config.title
@@ -45,12 +45,35 @@ function Widget(config) {
     var _zz
     var trueF = null;
     var zoom
+    //按键状态
+    var changeX = false
+    var changeY = false
+    //缩放状态
+    var Xk = 1, Yk = 1, K0 = 1, Mx = 0, My = 0
     console.log('tiske', (width / 100).toFixed(0))
     // 日期格式化
     var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
     var formatDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
-    var ticks = (width / 100).toFixed(0)
-
+    window.onkeydown = function (e) {
+        if (e.keyCode == 16) {
+            changeX = true
+        }
+        if (e.keyCode == 17) {
+            changeY = true
+        }
+        e.stopPropagation()
+        e.preventDefault();
+    }
+    window.onkeyup = function (e) {
+        if (e.keyCode == 16) {
+            changeX = false
+        }
+        if (e.keyCode == 17) {
+            changeY = false
+        }
+        e.stopPropagation()
+        e.preventDefault();
+    }
     var W = width - _marginLeft - _marginRight
     var H = height - _marginBottom - _marginTop
     console.log((W / 100).toFixed(0))
@@ -95,9 +118,12 @@ function Widget(config) {
         _zAxis.call(d3.axisBottom().scale(_Z))
         _zAxis.select('path').attr('stroke', "url(#" + addColor(_zAxis.node(), interColor, 0, 100) + ")").attr('stroke-width', 10);
         _zAxis.selectAll('g.tick').select('line').attr('stroke', 'none');
-        _xAxis.call(XA.scale(_X))
+        var ticks = Number((width / 140).toFixed(0) - 3)
+        _xAxis.call(XA.scale(_X).ticks(ticks))
         _Ymain = formatY(yAxis, H);
         Y = _Ymain.Y
+        _yz = Y
+        _xz = _X
         //添加背景色
         _bg = _svg
             .append('svg')
@@ -125,20 +151,30 @@ function Widget(config) {
             .enter()
             .append('g')
             .attr('class', 'ys')
-        yrect.append('text')
+        yrect.filter(function (d, i) {
+            console.log("dada", Math.abs(Y(d.range[1]) - Y(d.range[0])))
+            //如果上下两个值域显示重叠，则直接隐藏下部分
+            if (Math.abs(Y(d.range[1]) - Y(d.range[0])) < 15) {
+                return false
+            }
+            if (_Ymain.data.length > 2) {
+                return i < 1
+            }
+            return true
+        })
+            .append('text')
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .text(function (d, i) { return d.data[0] + yUnit })
             .attr('class', 'text1')
-            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0]) - 10) + ')' })
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0])) + ')' })
         yrect.append('text').text(function (d, i) { return d.data[1] + yUnit })
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .attr('class', 'text2')
-            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 15) + ')' })
-
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 5) + ')' })
 
         //添加线条
         _zoomRoot = _svg.append('g')
@@ -158,14 +194,14 @@ function Widget(config) {
         zoom = d3
             .zoom()
             .scaleExtent([
-                1 / 2,
+                1,
                 (length / (1000 * ((width / 130).toFixed(0))))
             ])
             .translateExtent([
-                [-width, 0
+                [0, 0
                 ],
                 [
-                    2 * width,
+                    width,
                     height
                 ]
             ])
@@ -180,12 +216,12 @@ function Widget(config) {
             .append('g')
             .attr('class', 'lines')
         _Lines.selectAll('line')
-            .data(formatLine(_Ymain,lines))
+            .data(formatLine(_Ymain, lines))
             .enter()
             .append('line')
             .attr('class', 'line')
             .filter(function (d, i) {
-                return d.rangeY!=-1
+                return d.rangeY != -1
             })
             .attr('x1', function (d, i) {
                 return _X(parseDate(d.data[1]))
@@ -200,25 +236,42 @@ function Widget(config) {
                 return _Ymain.Y(d.rangeY)
             })
             .attr('stroke', '#e3e')
+            .attr('stroke-width', 2)
+            .on('mouseover', function (d, i) { d3.select(this).attr('stroke-width', 4) })
+            .on('mouseout', function (d, i) { d3.select(this).attr('stroke-width', 2) })
             .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
         //设置room
-        _zoomRoot.call(zoom)
-        // _Lines.call(zoom)
-        // _bg.call(zoom)
+        _zoomRoot.call(zoom).on("dblclick.zoom", null);
+        _Lines.call(zoom).on("dblclick.zoom", null);
+        _bg.call(zoom).on("dblclick.zoom", null);
     }
     function zoomed() {
-        // console.log(d3.event)
-        // 构建新X比例尺
-        var xz = d3
-            .event
-            .transform
-            .rescaleX(_X);
-        // 构建新Y比例尺
-        var yz = d3
-            .event
-            .transform
-            .rescaleY(_Ymain.Y);
+        var D3Zoom = d3.event.transform
 
+        console.log(changeX, changeY)
+        // 构建新X比例尺
+        var xz = _xz
+        // 构建新Y比例尺
+        var yz = _yz
+        if (changeX || (!changeX && !changeY)) {
+            console.log('xk===', Xk, K0)
+            //不移动Y
+            Xk = Number((D3Zoom.k - K0) + Xk)
+            console.log('xk===', Xk)
+            var zoomKx = d3.event.transform
+            zoomKx.k = Xk
+            console.log('zoomKx', zoomKx)
+            xz = zoomKx.rescaleX(_X)
+        }
+        if (changeY || (!changeX && !changeY)) {
+            //不移动X
+            Yk = (D3Zoom.k - K0) + Yk
+            var zoomKy = d3.event.transform
+            zoomKy.k = Yk
+            console.log('zoomKy', zoomKy)
+            yz = zoomKy.rescaleY(_Ymain.Y)
+        }
+        K0 = D3Zoom.k
         var ys = yz.domain()
         var xs = xz.domain()
         console.log("ys", ys[0])
@@ -229,47 +282,63 @@ function Widget(config) {
         // }
         console.log('x')
         _xz = xz
-        _yz = _Ymain.Y
+        _yz = yz
 
         _Lines.selectAll('line.line')
             .attr('x1', function (d, i) {
-                return _xz(parseDate(d.data[1]))
+                console.log(d)
+                return xz(parseDate(d.data[1]))
             })
             .attr('y1', function (d, i) {
-                return _Ymain.Y(d.rangeY)
+                return yz(d.rangeY)
             })
             .attr('x2', function (d, i) {
-                return _xz(parseDate(d.data[2]))
+                return xz(parseDate(d.data[2]))
             })
             .attr('y2', function (d) {
-                return _Ymain.Y(d.rangeY)
+                return yz(d.rangeY)
             })
-        _xAxis.call(XA.scale(_xz))
+        var ticks = Number((width / 140).toFixed(0) - 3)
+        console.log("ticks", ticks)
+        _xAxis.call(XA.scale(xz).ticks(ticks))
         //控制x轴
         //更新 x和Y轴
-        _yAxis.selectAll('g.ys').select('text.text1')
+        _yAxis
+            .selectAll('g.ys')
+            .filter(function (d, i) {
+                console.log("dada", d)
+                //如果上下两个值域显示重叠，则直接隐藏下部分
+                if (Math.abs(Y(d.range[1]) - Y(d.range[0])) < 15) {
+                    return false
+                }
+                if (_Ymain.data.length > 2) {
+                    return i < 1
+                }
+                return true
+            }).select('text.text1')
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .text(function (d, i) { return d.data[0] + yUnit })
             .transition()
-            .attr('transform', function (d, i) { return 'translate(-15,' + (_yz(d.range[0]) - 10) + ')' })
+            .attr('transform', function (d, i) { return 'translate(-15,' + (yz(d.range[0])) + ')' })
         _yAxis.selectAll('g.ys').select('text.text2')
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .text(function (d, i) { return d.data[1] + yUnit })
-            .transition().attr('transform', function (d, i) { return 'translate(-15,' + (_yz(d.range[1]) + 15) + ')' })
+            .attr('transform', function (d, i) { return 'translate(-15,' + (yz(d.range[1]) + 5) + ')' })
         // d3.select('g.yAxis').call(d3.axisLeft().scale(yz))
         //更新背景色
         _bg.selectAll('rect')
-            .transition()
             .attr('y', function (d, i) {
-                console.log(_Ymain)
-                return _yz(d.range[1])
+                var y = yz(d.range[1]) > -window.innerHeight ? yz(d.range[1]) : -window.innerHeight
+                return y
             })
             .attr('height', function (d, i) {
-                return _yz(d.range[0]) - _yz(d.range[1])
+                var y = yz(d.range[1]) > -window.innerHeight ? yz(d.range[1]) : -window.innerHeight
+
+                return yz(d.range[0]) - y
             })
             .attr('fill', function (d, i) {
                 return d.data[2]
@@ -280,8 +349,8 @@ function Widget(config) {
             var mouse = d3.mouse(this);
             mouse[0] = mouse[0] - marginLeft
             mouse[1] = mouse[1] - marginTop
-            tipX.transition().duration(10).attr('x1', mouse[0]).attr('x2', mouse[0])
-            tipY.transition().duration(10).attr('y1', mouse[1]).attr('y2', mouse[1])
+            tipX.duration(10).attr('x1', mouse[0]).attr('x2', mouse[0])
+            tipY.duration(10).attr('y1', mouse[1]).attr('y2', mouse[1])
         })
     }
 
@@ -323,8 +392,8 @@ function Widget(config) {
                 (length / (1000 * ((width / 130).toFixed(0))))
             ])
 
-
-        _xAxis.call(XA.scale(_X))
+        var ticks = Number((width / 140).toFixed(0) - 3)
+        _xAxis.call(XA.scale(_X).ticks(ticks))
         _Ymain = formatY(yAxis, H);
         console.log(yAxis, _Ymain)
         console.log(W)
@@ -358,18 +427,32 @@ function Widget(config) {
             .enter()
             .append('g')
             .attr('class', 'ys')
-        yrect.append('text').text(function (d, i) { return d.data[0] + yUnit })
+        yrect.filter(function (d, i) {
+            console.log("dada", Math.abs(Y(d.range[1]) - Y(d.range[0])))
+            //如果上下两个值域显示重叠，则直接隐藏下部分
+            if (Math.abs(Y(d.range[1]) - Y(d.range[0])) < 15) {
+                return false
+            }
+            if (_Ymain.data.length > 2) {
+                return i < 1
+            }
+            return true
+        })
+            .append('text').text(function (d, i) { return d.data[0] + yUnit })
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .attr('class', 'text1')
-            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[0]) - 10) + ')' })
+            .attr('transform', function (d, i) {
+
+                return 'translate(-15,' + (Y(d.range[0])) + ')'
+            })
         yrect.append('text').text(function (d, i) { return d.data[1] + yUnit })
             .attr('font-size', "10")
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .attr('class', 'text2')
-            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 15) + ')' })
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 5) + ')' })
 
         //添加线条
         _zoomRoot
@@ -383,12 +466,12 @@ function Widget(config) {
             .select('g')
         _Lines.selectAll('line').remove()
         _Lines.selectAll('line')
-            .data(lines)
+            .data(formatLine(_Ymain, lines))
             .enter()
             .append('line')
             .attr('class', 'line')
             .filter(function (d, i) {
-                return d.rangeY!=-1
+                return d.rangeY != -1
             })
             .attr('x1', function (d, i) {
                 return _X(parseDate(d.data[1]))
@@ -404,7 +487,7 @@ function Widget(config) {
             })
             .attr('stroke-width', 4)
             .attr('stroke', '#e3e')
-            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d) })
+            .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
 
         _zoomRoot.on("zoom", function () { zoomed() });
         _zoomRoot.call(zoom)
@@ -582,12 +665,12 @@ function Widget(config) {
         return data;
     }
     //将线段在原始阶段处理
-    function formatLine(yMain,line){
+    function formatLine(yMain, line) {
         var lines = []
-        line.map(function(d,i){
+        line.map(function (d, i) {
             lines.push({
-                data:d,
-                rangeY:GetYvalue(yMain,d[0])
+                data: d,
+                rangeY: GetYvalue(yMain, d[0])
             })
         })
         return lines
