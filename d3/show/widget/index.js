@@ -7,17 +7,17 @@ window.onload = function () {
         height: window.innerHeight,
         xAxis: ['2017-06-01 21:12:32', '2017-08-01 21:12:38'],
         yAxis:[
-            [0,1,'#f00',{
+            [0,2,'#f00',{
                 yAxis:[1],
                 visible:true
             }],
-            [1,3,'#ff0',{
+            [2,4,'#ff0',{
                 yAxis:[1],
                 visible:true
             }],
             [6,8,'#fff',{
                 yAxis:[1],
-                visible:false
+                visible:true
             }],
             [10,12,'#eee',{
                 yAxis:[1],

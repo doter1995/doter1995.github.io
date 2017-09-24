@@ -256,21 +256,27 @@ function MQVisWidget(config) {
         if (changeX || (!changeX && !changeY)) {
             console.log('xk===', Xk, K0)
             //不移动Y
-            Xk = Number((D3Zoom.k - K0) + Xk)
+            Xk = Number((D3Zoom.k * Xk / K0))
             console.log('xk===', Xk)
             var zoomKx = d3.event.transform
             zoomKx.k = Xk
+            zoomKx.y = My
+
             console.log('zoomKx', zoomKx)
             xz = zoomKx.rescaleX(_X)
         }
         if (changeY || (!changeX && !changeY)) {
             //不移动X
-            Yk = (D3Zoom.k - K0) + Yk
+            Yk = (D3Zoom.k * Yk / K0)
             var zoomKy = d3.event.transform
             zoomKy.k = Yk
+            zoomKy.x = Mx
+
             console.log('zoomKy', zoomKy)
             yz = zoomKy.rescaleY(_Ymain.Y)
         }
+        Mx = D3Zoom.x
+        My = D3Zoom.y
         K0 = D3Zoom.k
         var ys = yz.domain()
         var xs = xz.domain()
