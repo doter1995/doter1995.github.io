@@ -49,7 +49,7 @@ function MQVisWidget(config) {
     var changeX = false
     var changeY = false
     //缩放状态
-    var Xk = 1, Yk = 1, K0 = 1, Mx = 0, My = 0
+    var Xk = 1, Yk = 1, K0 = 1, Mx = 0, My = 0,Mx0 = 0, My0 = 0
     console.log('tiske', (width / 100).toFixed(0))
     // 日期格式化
     var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
@@ -263,6 +263,8 @@ function MQVisWidget(config) {
             if(zoomKx.k<1){
                 zoomKx.k=1
             }
+            Mx = (D3Zoom.x-Mx0)+Mx 
+            zoomKx.x=Mx
             console.log('zoomKx', zoomKx)
             xz = zoomKx.rescaleX(_X)
         }
@@ -274,11 +276,13 @@ function MQVisWidget(config) {
             if(zoomKy.k<1){
                 zoomKy.k=1
             }
+            My = (D3Zoom.y-My0)+My 
+            zoomKy.y=My
             console.log('zoomKy', zoomKy)
             yz = zoomKy.rescaleY(_Ymain.Y)
         }
-        Mx = D3Zoom.x
-        My = D3Zoom.y
+        Mx0 = D3Zoom.x
+        My0 = D3Zoom.y
         K0 = D3Zoom.k
         var ys = yz.domain()
         var xs = xz.domain()
