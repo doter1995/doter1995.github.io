@@ -259,8 +259,10 @@ function MQVisWidget(config) {
             Xk = Number((D3Zoom.k * Xk / K0))
             console.log('xk===', Xk)
             var zoomKx = d3.event.transform
-
-
+            zoomKx.k=Xk
+            if(zoomKx.k<1){
+                zoomKx.k=1
+            }
             console.log('zoomKx', zoomKx)
             xz = zoomKx.rescaleX(_X)
         }
@@ -268,8 +270,10 @@ function MQVisWidget(config) {
             //不移动X
             Yk = (D3Zoom.k * Yk / K0)
             var zoomKy = d3.event.transform
-     
-
+            zoomKy.Yk = Yk
+            if(zoomKy.k<1){
+                zoomKy.k=1
+            }
             console.log('zoomKy', zoomKy)
             yz = zoomKy.rescaleY(_Ymain.Y)
         }
