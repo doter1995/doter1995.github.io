@@ -242,8 +242,8 @@ function MQVisWidget(config) {
             .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
         //设置room
         _zoomRoot.call(zoom).on("dblclick.zoom", null);
-        _Lines.call(zoom).on("dblclick.zoom", null);
-        _bg.call(zoom).on("dblclick.zoom", null);
+        // _Lines.call(zoom).on("dblclick.zoom", null);
+        // _bg.call(zoom).on("dblclick.zoom", null);
     }
     function zoomed() {
         var D3Zoom = d3.event.transform
@@ -256,7 +256,7 @@ function MQVisWidget(config) {
         if (changeX || (!changeX && !changeY)) {
             console.log('xk===', Xk, K0)
             //不移动Y
-            Xk = Number((D3Zoom.k * Xk / K0))
+            Xk = D3Zoom.k*Xk/K0
             console.log('xk===', Xk)
             var zoomKx = d3.event.transform
             zoomKx.k=Xk
@@ -268,9 +268,9 @@ function MQVisWidget(config) {
         }
         if (changeY || (!changeX && !changeY)) {
             //不移动X
-            Yk = (D3Zoom.k * Yk / K0)
+            Yk = D3Zoom.k*Yk/K0
             var zoomKy = d3.event.transform
-            zoomKy.Yk = Yk
+            zoomKy.k = Yk
             if(zoomKy.k<1){
                 zoomKy.k=1
             }
@@ -340,13 +340,20 @@ function MQVisWidget(config) {
         //更新背景色
         _bg.selectAll('rect')
             .attr('y', function (d, i) {
-                var y = yz(d.range[1]) > -window.innerHeight ? yz(d.range[1]) : -window.innerHeight
+                var y = yz(d.range[1])
+                if(y<-window.innerHeight) {
+                    y=-window.innerHeight
+                }
                 return y
             })
             .attr('height', function (d, i) {
-                var y = yz(d.range[1]) > -window.innerHeight ? yz(d.range[1]) : -window.innerHeight
-
-                return yz(d.range[0]) - y
+                var y = yz(d.range[1])
+                if(y<-window.innerHeight) {
+                    y=-window.innerHeight
+                }
+                var y1 = yz(d.range[0]) - y
+                y1<0?y1=0:""
+                return y1
             })
             .attr('fill', function (d, i) {
                 return d.data[2]
