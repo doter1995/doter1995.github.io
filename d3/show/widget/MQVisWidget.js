@@ -35,30 +35,36 @@ function MQVisWidget(config) {
     var _bg
     var _Lines
     var _zoomRoot
+    var yrect //y轴提示字
     //构建属性
     var _X;
     var _Y;
     var _Z
     var _Ymain
+    //最新比例尺
     var _xz
     var _yz
-    var _zz
     var trueF = null;
     var zoom
     //按键状态
     var changeX = false
     var changeY = false
     //缩放状态
-    var Xk = 1, Yk = 1, K0 = 1, Mx = 0, My = 0,Mx0 = 0, My0 = 0
-    console.log('tiske', (width / 100).toFixed(0))
+    var Xk = 1, Yk = 1, K0 = 1, Mx = 0, My = 0, Mx0 = 0, My0 = 0
+    var zoomKx
+    var zoomKy
     // 日期格式化
     var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
     var formatDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
+    //控制更新变量
+    var chAxis = false
+
+
     window.onkeydown = function (e) {
         if (e.keyCode == 16) {
             changeX = true
         }
-        if (e.keyCode == 17) {
+        if (e.keyCode == 18) {
             changeY = true
         }
         e.stopPropagation()
@@ -68,7 +74,7 @@ function MQVisWidget(config) {
         if (e.keyCode == 16) {
             changeX = false
         }
-        if (e.keyCode == 17) {
+        if (e.keyCode == 18) {
             changeY = false
         }
         e.stopPropagation()
@@ -79,6 +85,7 @@ function MQVisWidget(config) {
     console.log((W / 100).toFixed(0))
     var XA = d3.axisBottom()
         .tickFormat(function (d) { return formatDate(d) })
+
     //初始化渲染
     this.render = function () {
 
@@ -256,42 +263,49 @@ function MQVisWidget(config) {
         if (changeX || (!changeX && !changeY)) {
             console.log('xk===', Xk, K0)
             //不移动Y
-            Xk = D3Zoom.k*Xk/K0
+            Xk = D3Zoom.k * Xk / K0
             console.log('xk===', Xk)
-            var zoomKx = d3.event.transform
-            zoomKx.k=Xk
-            if(zoomKx.k<1){
-                zoomKx.k=1
+            zoomKx = d3.event.transform
+            zoomKx.k = Xk
+            if (zoomKx.k < 1) {
+                zoomKx.k = 1
             }
-            Mx = (D3Zoom.x-Mx0)+Mx 
-            zoomKx.x=Mx
+            Mx = (D3Zoom.x - Mx0) + Mx
+            zoomKx.x = Mx
             console.log('zoomKx', zoomKx)
             xz = zoomKx.rescaleX(_X)
+            var xs = xz.domain()
+            //控制y轴
+            if (xs[0] < parseDate(xAxis[0])) {
+                yz.domain([parseDate(xAxis[0]), (xs[1] + Math.abs(parseDate(xAxis[1]) - xs[0]))])
+            }
         }
         if (changeY || (!changeX && !changeY)) {
             //不移动X
-            Yk = D3Zoom.k*Yk/K0
-            var zoomKy = d3.event.transform
+            Yk = D3Zoom.k * Yk / K0
+            zoomKy = d3.event.transform
             zoomKy.k = Yk
-            if(zoomKy.k<1){
-                zoomKy.k=1
+            if (zoomKy.k < 1) {
+                zoomKy.k = 1
             }
-            My = (D3Zoom.y-My0)+My 
-            zoomKy.y=My
+            My = (D3Zoom.y - My0) + My
+
+            zoomKy.y = My
             console.log('zoomKy', zoomKy)
             yz = zoomKy.rescaleY(_Ymain.Y)
+
+            var ys = yz.domain()
+
+            //控制y轴
+            if (ys[0] < 0) {
+                yz.domain([0, (ys[1] + Math.abs(ys[0]))])
+            }
+            console.log('ydomain', yz.domain())
+            console.log('yrange', yz.range())
         }
         Mx0 = D3Zoom.x
         My0 = D3Zoom.y
         K0 = D3Zoom.k
-        var ys = yz.domain()
-        var xs = xz.domain()
-        console.log("ys", ys[0])
-        console.log("ys", d3.event)
-        //控制y轴
-        // if (ys[0] < 0) {
-        //     yz.domain([0, (ys[1] + Math.abs(ys[0]))])
-        // }
         console.log('x')
         _xz = xz
         _yz = yz
@@ -332,7 +346,6 @@ function MQVisWidget(config) {
             .attr('font-family', "sans-serif")
             .attr('text-anchor', 'middle')
             .text(function (d, i) { return d.data[0] + yUnit })
-            .transition()
             .attr('transform', function (d, i) { return 'translate(-15,' + (yz(d.range[0])) + ')' })
         _yAxis.selectAll('g.ys').select('text.text2')
             .attr('font-size', "10")
@@ -345,18 +358,18 @@ function MQVisWidget(config) {
         _bg.selectAll('rect')
             .attr('y', function (d, i) {
                 var y = yz(d.range[1])
-                if(y<-window.innerHeight) {
-                    y=-window.innerHeight
+                if (y < -window.innerHeight) {
+                    y = -window.innerHeight
                 }
                 return y
             })
             .attr('height', function (d, i) {
                 var y = yz(d.range[1])
-                if(y<-window.innerHeight) {
-                    y=-window.innerHeight
+                if (y < -window.innerHeight) {
+                    y = -window.innerHeight
                 }
                 var y1 = yz(d.range[0]) - y
-                y1<0?y1=0:""
+                y1 < 0 ? y1 = 0 : ""
                 return y1
             })
             .attr('fill', function (d, i) {
@@ -391,7 +404,7 @@ function MQVisWidget(config) {
             .transition()
             .attr('transform', 'translate(0,' + H + ')')
 
-        _X = d3.scaleTime()
+        _X = _X ? _X.range([0, W]) : d3.scaleTime()
             .domain([parseDate(xAxis[0]), parseDate(xAxis[1])])
             .range([0, W])
         _Z = d3.scaleLinear()
@@ -423,6 +436,8 @@ function MQVisWidget(config) {
             .select('svg.bg')
             .attr('width', W)
             .attr('height', H)
+
+        //添加背景色
         _bg.selectAll('rect').remove()
         var bg = _bg.selectAll('rect')
             .data(_Ymain.data)
@@ -439,9 +454,11 @@ function MQVisWidget(config) {
             .attr('fill', function (d, i) {
                 return d.data[2]
             })
+        var Y = _Ymain.Y
+
         //添加y轴
         _yAxis.selectAll('g').remove()
-        var yrect = _yAxis.selectAll('g')
+        yrect = _yAxis.selectAll('g')
             .data(_Ymain.data)
             .enter()
             .append('g')
@@ -483,6 +500,14 @@ function MQVisWidget(config) {
             .attr('width', W)
             .attr('height', H)
             .select('g')
+        updateLine()
+        _zoomRoot.on("zoom", function () { zoomed() });
+        _zoomRoot.call(zoom)
+        // _Lines.call(zoom)
+        // _bg.call(zoom)
+    }
+    //更新线条
+    function updateLine() {
         _Lines.selectAll('line').remove()
         _Lines.selectAll('line')
             .data(formatLine(_Ymain, lines))
@@ -504,55 +529,41 @@ function MQVisWidget(config) {
             .attr('y2', function (d) {
                 return _Ymain.Y(d.rangeY)
             })
-            .attr('stroke-width', 4)
+            .attr('stroke-width', 2)
             .attr('stroke', '#e3e')
             .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
-
-        _zoomRoot.on("zoom", function () { zoomed() });
-        _zoomRoot.call(zoom)
-        _Lines.call(zoom)
-        _bg.call(zoom)
+            .on('mouseover', function (d, i) { d3.select(this).attr('stroke-width', 4) })
+            .on('mouseout', function (d, i) { d3.select(this).attr('stroke-width', 2) })
     }
-
-
     this.updateOptions = function (config) {
+        //是否全部更新
+        var ToUp = false
         if (config.width != undefined && config.height != undefined) {
             width = config.width - 15
             height = config.height - 45
+            //统一更新
+            reSize()
         }
-        if (config.title != undefined) {
-            console.log('aa', self)
-            title = config.title
-        }
+
         if (config.xAxis != undefined) {
             xAxis = config.xAxis
             //此处不建议更新吧？
             //建议统一更新
             // self.reRender(config)
+            _X = null
+            ToUp = true
         }
         if (config.yAxis != undefined) {
             yAxis = config.yAxis
             //此处不建议更新吧？
             //建议统一更新
             // self.reRender(config)
-        }
-        if (config.lines != undefined) {
-            lines = config.lines
-            //此处不建议更新吧？
-            //建议统一更新
-            // self.reRender(config)
-        }
-        if (config.extLines != undefined) {
-            lines = d3.merge([lines, config.extLines])
-            //此处不建议更新吧？
-            //建议统一更新
-            // self.reRender(config)
+            _Ymain = null
+            ToUp = true
         }
 
-        if (config.colorMap != undefined) {
-            colorMap = config.colorMap
-            //todo:更新z轴，及伪彩图
-        }
+
+        //第二阶段
         if (config.yAxisVisible != undefined) {
             config.map(function (d, i) {
                 yAxis[d.index].visible = d.visible
@@ -586,13 +597,168 @@ function MQVisWidget(config) {
             rightAttrInfo = config.rightAttrInfo
             //
         }
+
+        if (ToUp) {
+            this.reRender()
+        }
+
         if (config.yUnit != undefined) {
             yUnit = config.yUnit
             //
+            yrect.select('text.text1').text(function (d, i) { return d.data[1] + yUnit })
+            yrect.select('text.text2').text(function (d, i) { return d.data[1] + yUnit })
         }
-        this.reRender(config)
-    }
+        //局部   
+        if (config.colorMap != undefined) {
+            colorMap = config.colorMap
+            //todo:更新z轴，及伪彩图
 
+        }
+        var upLine = false
+        if (config.lines != undefined) {
+            lines = config.lines
+            //此处不建议更新吧？
+            //建议统一更新
+            // self.reRender(config)
+            upLine = false
+        }
+        if (config.extLines != undefined) {
+            lines = d3.merge([lines, config.extLines])
+            //此处不建议更新吧？
+            //建议统一更新
+            // self.reRender(config)
+            upLine = false
+        }
+        if (upLine) {
+            updateLine()
+        }
+        if (config.title != undefined) {
+            console.log('aa', self)
+            title = config.title
+            _title.style('width', width + 'px').html(title)
+        }
+        if (config.onLineSelected != undefined) {
+            onLineSelected = config.onLineSelected
+            //线的点击事件
+            _Lines.selectAll('line')
+                .on('click', function (d, i) {
+                    onLineSelected(d3.select(this), d3.event, d.data)
+                })
+        }
+    }
+    // 更新状态并还原状态
+    //先处理大小问题
+    function reSize() {
+        _title.style('width', width + 'px').html(title)
+        W = width - _marginLeft - _marginRight
+        H = height - _marginBottom - _marginTop
+        _svg = node.select('svg.root')
+            .attr('width', width)
+            .attr('height', height)
+            .select('g')
+        _svg
+            .select('g.xAxis')
+            .transition()
+            .attr('transform', 'translate(0,' + H + ')')
+        _xz = _xz ? _xz.range([0, W]) : d3.scaleTime()
+            .domain([parseDate(xAxis[0]), parseDate(xAxis[1])])
+            .range([0, W])
+        _Z = d3.scaleLinear()
+            .domain([0, 100])
+            .range([W / 4, W / 4 * 3])
+        _zAxis.call(d3.axisBottom().scale(_Z))
+        //此处可以判断是否发生颜色变化，或者直接删除原有渐变色
+        var interColor = d3.interpolateRgb(colorMap[0][1], colorMap[colorMap.length - 1][1])
+        _zAxis.select('path').attr('stroke', "url(#" + addColor(_zAxis.node(), interColor, 0, 100) + ")").attr('stroke-width', 10);
+        _zAxis.selectAll('g.tick').select('line').attr('stroke', 'none');
+
+        var xdomain = _xz.domain()
+        var length = xdomain[1] - xdomain[0]
+        console.log('xdom', length / (1000))
+        zoom = zoom
+            .scaleExtent([
+                1 / 2,
+                (length / (1000 * ((width / 130).toFixed(0))))
+            ])
+
+        var ticks = Number((width / 140).toFixed(0) - 3)
+        _xAxis.call(XA.scale(_xz).ticks(ticks))
+        var Y = _yz.range([H,0])
+        _Ymain.Y = Y   
+        //添加背景色
+        _bg = _svg
+            .select('svg.bg')
+            .attr('width', W)
+            .attr('height', H)
+
+        //添加背景色
+        _bg.selectAll('rect').remove()
+        var bg = _bg.selectAll('rect')
+            .data(_Ymain.data)
+        bg.enter()
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', function (d, i) {
+                return _Ymain.Y(d.range[1])
+            })
+            .attr('width', W)
+            .attr('height', function (d, i) {
+                return _Ymain.Y(d.range[0]) - _Ymain.Y(d.range[1])
+            })
+            .attr('fill', function (d, i) {
+                return d.data[2]
+            })
+        var Y = _Ymain.Y
+
+        //添加y轴
+        _yAxis.selectAll('g').remove()
+        yrect = _yAxis.selectAll('g')
+            .data(_Ymain.data)
+            .enter()
+            .append('g')
+            .attr('class', 'ys')
+        yrect.filter(function (d, i) {
+            console.log("dada", Math.abs(Y(d.range[1]) - Y(d.range[0])))
+            //如果上下两个值域显示重叠，则直接隐藏下部分
+            if (Math.abs(Y(d.range[1]) - Y(d.range[0])) < 15) {
+                return false
+            }
+            if (_Ymain.data.length > 2) {
+                return i < 1
+            }
+            return true
+        })
+            .append('text').text(function (d, i) { return d.data[0] + yUnit })
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .attr('class', 'text1')
+            .attr('transform', function (d, i) {
+
+                return 'translate(-15,' + (Y(d.range[0])) + ')'
+            })
+        yrect.append('text').text(function (d, i) { return d.data[1] + yUnit })
+            .attr('font-size', "10")
+            .attr('font-family', "sans-serif")
+            .attr('text-anchor', 'middle')
+            .attr('class', 'text2')
+            .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 5) + ')' })
+
+        //添加线条
+        _zoomRoot
+            .attr('width', W)
+            .attr('height', H)
+        //添加线条
+        _Lines = _svg
+            .select('svg.lines')
+            .attr('width', W)
+            .attr('height', H)
+            .select('g')
+        updateLine()
+        _zoomRoot.on("zoom", function () { zoomed() });
+        _zoomRoot.call(zoom)
+
+    }
 
 
 
@@ -694,8 +860,5 @@ function MQVisWidget(config) {
         })
         return lines
     }
-
-
     var self = this
-
 }
