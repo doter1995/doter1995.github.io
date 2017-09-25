@@ -247,8 +247,6 @@ function MQVisWidget(config) {
             .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
         //设置room
         _zoomRoot.call(zoom).on("dblclick.zoom", null);
-        // _Lines.call(zoom).on("dblclick.zoom", null);
-        // _bg.call(zoom).on("dblclick.zoom", null);
     }
     function zoomed() {
         var D3Zoom = d3.event.transform
@@ -288,11 +286,8 @@ function MQVisWidget(config) {
                 zoomKy.k = 1
 
             }
-            console.log('zoomKy', zoomKy)
             yz = zoomKy.rescaleY(_Ymain.Y)
-
             var ys = yz.domain()
-
             //控制y轴
             if (ys[0] < 0) {
                 yz.domain([0, (ys[1] + Math.abs(ys[0]))])
@@ -383,8 +378,14 @@ function MQVisWidget(config) {
         })
     }
 
+    //直接重绘
 
     this.reRender = function (config) {
+        // 重置状态属性
+        Mx0 = 0
+        My0 = 0
+        K0 = 0
+
         _title.style('width', width + 'px').html(title)
         //标题已处理,忽略标题
         //颜色插值器
@@ -514,16 +515,16 @@ function MQVisWidget(config) {
                 return d.rangeY != -1
             })
             .attr('x1', function (d, i) {
-                return _X(parseDate(d.data[1]))
+                return _xz(parseDate(d.data[1]))
             })
             .attr('y1', function (d, i) {
-                return _Ymain.Y(d.rangeY)
+                return _yz(d.rangeY)
             })
             .attr('x2', function (d, i) {
-                return _X(parseDate(d.data[2]))
+                return _xz(parseDate(d.data[2]))
             })
             .attr('y2', function (d) {
-                return _Ymain.Y(d.rangeY)
+                return _yz(d.rangeY)
             })
             .attr('stroke-width', 2)
             .attr('stroke', '#e3e')
@@ -564,18 +565,22 @@ function MQVisWidget(config) {
             attrOpts = config.attrOpts
             //
         }
+        
         if (config.onLineSelected != undefined) {
             onLineSelected = config.onLineSelected
             //线的点击事件
         }
+
         if (config.onRightAttrClick != undefined) {
             onRightAttrClick = config.onRightAttrClick
             //有标签的点击事件
         }
+
         if (config.hoverSelectOffset != undefined) {
             hoverSelectOffset = config.hoverSelectOffset
             //
         }
+
         if (config.makeInfo != undefined) {
             makeInfo = config.makeInfo
             //
@@ -616,14 +621,14 @@ function MQVisWidget(config) {
             //此处不建议更新吧？
             //建议统一更新
             // self.reRender(config)
-            upLine = false
+            upLine = true
         }
         if (config.extLines != undefined) {
             lines = d3.merge([lines, config.extLines])
             //此处不建议更新吧？
             //建议统一更新
             // self.reRender(config)
-            upLine = false
+            upLine = true
         }
         if (upLine) {
             updateLine()
@@ -642,7 +647,7 @@ function MQVisWidget(config) {
                 })
         }
     }
-    // 更新状态并还原状态
+
     //先处理大小问题
     function reSize() {
         _title.style('width', width + 'px').html(title)
