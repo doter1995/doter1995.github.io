@@ -185,12 +185,10 @@ function MQVisWidget(config) {
 
         //添加线条
         _zoomRoot = _svg.append('g')
-        _zoomRoot.attr('class', 'zoom')
+            .attr('class', 'zoom')
             .append('rect')
             .attr('fill', 'none')
             .attr("pointer-events", "all")
-            .attr('x', _marginLeft)
-            .attr('y', _marginTop)
             .attr('width', W)
             .attr('height', H)
 
@@ -254,8 +252,7 @@ function MQVisWidget(config) {
     }
     function zoomed() {
         var D3Zoom = d3.event.transform
-
-        console.log(changeX, changeY)
+        console.log('d3zoom', d3.event.transform)
         // 构建新X比例尺
         var xz = _xz
         // 构建新Y比例尺
@@ -267,12 +264,12 @@ function MQVisWidget(config) {
             console.log('xk===', Xk)
             zoomKx = d3.event.transform
             zoomKx.k = Xk
+            
+            Mx = (D3Zoom.x - Mx0) + Mx
+            zoomKx.x = Mx
             if (zoomKx.k < 1) {
                 zoomKx.k = 1
             }
-            Mx = (D3Zoom.x - Mx0) + Mx
-            zoomKx.x = Mx
-            console.log('zoomKx', zoomKx)
             xz = zoomKx.rescaleX(_X)
             var xs = xz.domain()
             //控制y轴
@@ -285,12 +282,12 @@ function MQVisWidget(config) {
             Yk = D3Zoom.k * Yk / K0
             zoomKy = d3.event.transform
             zoomKy.k = Yk
-            if (zoomKy.k < 1) {
-                zoomKy.k = 1
-            }
             My = (D3Zoom.y - My0) + My
-
             zoomKy.y = My
+            if (zoomKy.k < 1 ) {
+                zoomKy.k = 1
+
+            }
             console.log('zoomKy', zoomKy)
             yz = zoomKy.rescaleY(_Ymain.Y)
 
@@ -501,7 +498,6 @@ function MQVisWidget(config) {
             .attr('height', H)
             .select('g')
         updateLine()
-        _zoomRoot.on("zoom", function () { zoomed() });
         _zoomRoot.call(zoom)
         // _Lines.call(zoom)
         // _bg.call(zoom)
@@ -538,12 +534,7 @@ function MQVisWidget(config) {
     this.updateOptions = function (config) {
         //是否全部更新
         var ToUp = false
-        if (config.width != undefined && config.height != undefined) {
-            width = config.width - 15
-            height = config.height - 45
-            //统一更新
-            reSize()
-        }
+
 
         if (config.xAxis != undefined) {
             xAxis = config.xAxis
@@ -601,7 +592,12 @@ function MQVisWidget(config) {
         if (ToUp) {
             this.reRender()
         }
-
+        if (config.width != undefined && config.height != undefined) {
+            width = config.width - 15
+            height = config.height - 45
+            //统一更新
+            reSize()
+        }
         if (config.yUnit != undefined) {
             yUnit = config.yUnit
             //
@@ -660,6 +656,7 @@ function MQVisWidget(config) {
             .select('g.xAxis')
             .transition()
             .attr('transform', 'translate(0,' + H + ')')
+        _X.range([0, W])
         _xz = _xz ? _xz.range([0, W]) : d3.scaleTime()
             .domain([parseDate(xAxis[0]), parseDate(xAxis[1])])
             .range([0, W])
@@ -675,16 +672,11 @@ function MQVisWidget(config) {
         var xdomain = _xz.domain()
         var length = xdomain[1] - xdomain[0]
         console.log('xdom', length / (1000))
-        zoom = zoom
-            .scaleExtent([
-                1 / 2,
-                (length / (1000 * ((width / 130).toFixed(0))))
-            ])
 
         var ticks = Number((width / 140).toFixed(0) - 3)
         _xAxis.call(XA.scale(_xz).ticks(ticks))
-        var Y = _yz.range([H,0])
-        _Ymain.Y = Y   
+        var Y = _yz.range([H, 0])
+        _Ymain.Y = _Ymain.Y.range([H, 0])
         //添加背景色
         _bg = _svg
             .select('svg.bg')
@@ -699,17 +691,15 @@ function MQVisWidget(config) {
             .append('rect')
             .attr('x', 0)
             .attr('y', function (d, i) {
-                return _Ymain.Y(d.range[1])
+                return Y(d.range[1])
             })
             .attr('width', W)
             .attr('height', function (d, i) {
-                return _Ymain.Y(d.range[0]) - _Ymain.Y(d.range[1])
+                return Y(d.range[0]) - Y(d.range[1])
             })
             .attr('fill', function (d, i) {
                 return d.data[2]
             })
-        var Y = _Ymain.Y
-
         //添加y轴
         _yAxis.selectAll('g').remove()
         yrect = _yAxis.selectAll('g')
@@ -749,14 +739,31 @@ function MQVisWidget(config) {
             .attr('width', W)
             .attr('height', H)
         //添加线条
-        _Lines = _svg
+         _svg
             .select('svg.lines')
             .attr('width', W)
             .attr('height', H)
-            .select('g')
-        updateLine()
-        _zoomRoot.on("zoom", function () { zoomed() });
-        _zoomRoot.call(zoom)
+        _Lines.selectAll('line.line')
+            .filter(function (d, i) {
+                return d.rangeY != -1
+            })
+            .attr('x1', function (d, i) {
+                return _xz(parseDate(d.data[1]))
+            })
+            .attr('y1', function (d, i) {
+                return Y(d.rangeY)
+            })
+            .attr('x2', function (d, i) {
+                return _xz(parseDate(d.data[2]))
+            })
+            .attr('y2', function (d) {
+                return Y(d.rangeY)
+            })
+            _zoomRoot
+            .attr('width', W)
+            .attr('height', H)
+        //     _zoomRoot.on("zoom", function () { zoomed() });
+        //    _zoomRoot.call(zoom)
 
     }
 
