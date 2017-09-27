@@ -25,7 +25,9 @@ function Widget(config) {
     var _xAxisG
     var _svg
     var rootG
-
+    var tipY
+    //当前鼠标所在y轴的值
+    var ydata = -1
     function render() {
         d3.select(domNode).selectAll('svg').remove()
         var Node = d3.select(domNode)
@@ -45,6 +47,17 @@ function Widget(config) {
         Y = d3.scaleLinear().domain([yAxis[0], yAxis[1]]).range([H, 0])
         xMain = formatX(xAxis)
         console.log(xMain)
+       tipY = rootG.append('rect')
+            .attr('x', -20)
+            .attr('y', 0)
+            .attr('width', 21)
+            .attr('height', H)
+            .attr('fill','#fff')
+            .on('click', function (d, i) {
+                var mouse = d3.mouse(this)
+                var data = Y.invert(mouse[1]);
+                onYAxisClick(data)
+            })
         _yAxis = rootG.append('g')
             .attr('class', 'yAxis')
         _yAxis.call(d3.axisLeft(Y))
@@ -265,7 +278,11 @@ function Widget(config) {
 
         if (config.onYAxisClick) {
             onYAxisClick = config.onYAxisClick
-            rerender()
+            tipY.on('click', function (d, i) {
+                var mouse = d3.mouse(this)
+                var data = Y.invert(mouse[1]);
+                onYAxisClick(data)
+            })
         }
     }
 

@@ -15,7 +15,8 @@ window.onload = function () {
         ],
         yAxis: [0, 20, 2],
         width:window.innerWidth-5,
-        height:window.innerHeight-5
+        height:window.innerHeight-5,
+        onYAxisClick:function(y){console.log(y)}
     }
     widget = new Widget(config)
     
