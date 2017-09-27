@@ -24,6 +24,7 @@ function Widget(config) {
     var _svgtitle
     var _xAxisG
     var _svg
+    var rootG
 
     function render() {
         d3.select(domNode).selectAll('svg').remove()
@@ -39,7 +40,7 @@ function Widget(config) {
         _svg = Node.append('svg')
             .attr('width', width)
             .attr('height', height - 20)
-        var rootG = _svg.append('g')
+        rootG = _svg.append('g')
             .attr('transform', 'translate(' + marginLeft + ',' + marginTop + ')')
         Y = d3.scaleLinear().domain([yAxis[0], yAxis[1]]).range([H, 0])
         xMain = formatX(xAxis)
@@ -179,7 +180,14 @@ function Widget(config) {
             })
             .attr('y', 15)
             .text(function (d, i) { return d.data[1] + xUnit })
-        _rects.select('rect')
+        d3.selectAll('g.rect').remove()
+        _rects = d3.select('g.rects').selectAll('g')
+            .data(data)
+            .enter()
+            .append('g')
+            .attr('class', 'rect')
+        _rects
+            .append('rect')
             .attr('x', function (d, i) {
                 return xMain.X(GetXvalue(xMain, d[0]))
             })
@@ -192,11 +200,14 @@ function Widget(config) {
             .attr('height', function (d, i) {
                 return Y(d[2]) - Y(d[3])
             })
+            .attr('fill', '#eb7d3c')
+            .append('title')
             .text(function (d, i) {
                 return d[5]
             })
-
-        _rects.select('text.text')
+        _rects.append('text')
+            .attr('class', 'text')
+            .attr('fill', "#fff")
             .attr('x', function (d, i) {
                 var x = xMain.X(GetXvalue(xMain, d[1])) + xMain.X(GetXvalue(xMain, d[0]))
                 return x / 2
@@ -236,12 +247,12 @@ function Widget(config) {
             Y = Y.domain([yAxis[0], yAxis[1]])
             rerender()
         }
-        if (config.xAxis) {
+        if (config.xAxis != undefined) {
             xAxis = config.xAxis
             xMain = formatX(xAxis)
             rerender()
         }
-        if (config.data) {
+        if (config.data != undefined) {
             data = config.data
             var A = d3.selectAll('g.rects')
                 .data(data)
