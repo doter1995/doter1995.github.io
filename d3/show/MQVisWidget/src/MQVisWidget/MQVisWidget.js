@@ -870,7 +870,7 @@ function MQVisWidget(config) {
     function GetYvalue(yMain, V) {
         var data = -1
         yMain.data.map(function (d, i) {
-            if (d.data[0] < V && d.data[1] > V) {
+            if (d.data[0] < V && d.data[1] >= V) {
                 //属于该对象
                 console.log(V - d.data[0] + d.range[0])
                 data = V - d.data[0] + d.range[0]
