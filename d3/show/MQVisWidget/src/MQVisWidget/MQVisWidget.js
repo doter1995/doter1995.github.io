@@ -18,6 +18,9 @@ function MQVisWidget(config) {
     var height = config.height ? config.height - 45 : 10
     var onLineSelected = config.onLineSelected ? config.onLineSelected : function () { alert('请加入点击事件') }
     var yUnit = config.yUnit ? config.yUnit : 'M'
+    
+    var colorMapSelectOffset=100
+    var onSelectColorMap = config.onSelectColorMap?config.onSelectColorMap:function(){alert('onSelectColorMap是必需事件')}
     /**
      * 私有属性
      */
@@ -36,6 +39,9 @@ function MQVisWidget(config) {
     var _Lines
     var _zoomRoot
     var yrect //y轴提示字
+    var Tip
+    var tipX
+    var tipY
     //构建属性
     var _X;
     var _Y;
@@ -185,7 +191,24 @@ function MQVisWidget(config) {
             .attr('text-anchor', 'middle')
             .attr('class', 'text2')
             .attr('transform', function (d, i) { return 'translate(-15,' + (Y(d.range[1]) + 5) + ')' })
-
+        // 绘制XY提示线
+        Tip = _svg.append('g')
+            .attr('class', 'tip')
+            .append('svg').attr('width', W).attr('height', H)
+        tipX = Tip.append('line')
+            .attr('class', 'tipX')
+            .attr('x1', 20)
+            .attr('y1', 0)
+            .attr('x2', 20)
+            .attr('y2', H)
+            .attr('stroke', '#222')
+        tipY = Tip.append('line')
+            .attr('class', 'tipX')
+            .attr('x1', 0)
+            .attr('y1', 20)
+            .attr('x2', W)
+            .attr('y2', 20)
+            .attr('stroke', '#222')
         //添加线条
         _zoomRoot = _svg.append('g')
             .attr('class', 'zoom')
@@ -250,6 +273,7 @@ function MQVisWidget(config) {
             .on('click', function (d, i) { onLineSelected(d3.select(this), d3.event, d.data) })
         //设置room
         _zoomRoot.call(zoom).on("dblclick.zoom", null);
+        setZoomlisent(_X, _Ymain.Y);
     }
     function zoomed() {
         var D3Zoom = d3.event.transform
@@ -265,7 +289,7 @@ function MQVisWidget(config) {
             console.log('xk===', Xk)
             zoomKx = d3.event.transform
             zoomKx.k = Xk
-            
+
             Mx = (D3Zoom.x - Mx0) + Mx
             zoomKx.x = Mx
             if (zoomKx.k < 1) {
@@ -285,7 +309,7 @@ function MQVisWidget(config) {
             zoomKy.k = Yk
             My = (D3Zoom.y - My0) + My
             zoomKy.y = My
-            if (zoomKy.k < 1 ) {
+            if (zoomKy.k < 1) {
                 zoomKy.k = 1
 
             }
@@ -304,7 +328,7 @@ function MQVisWidget(config) {
         console.log('x')
         _xz = xz
         _yz = yz
-
+        setZoomlisent(xz, yz)
         _Lines.selectAll('line.line')
             .attr('x1', function (d, i) {
                 console.log(d)
@@ -372,12 +396,10 @@ function MQVisWidget(config) {
             })
     }
     function setZoomlisent(x, y) {
-        zoomRoot.on('mousemove', function (d) {
+        _zoomRoot.on('mousemove', function (d) {
             var mouse = d3.mouse(this);
-            mouse[0] = mouse[0] - marginLeft
-            mouse[1] = mouse[1] - marginTop
-            tipX.duration(10).attr('x1', mouse[0]).attr('x2', mouse[0])
-            tipY.duration(10).attr('y1', mouse[1]).attr('y2', mouse[1])
+            tipX.attr('x1', mouse[0]).attr('x2', mouse[0])
+            tipY.attr('y1', mouse[1]).attr('y2', mouse[1])
         })
     }
 
@@ -559,26 +581,38 @@ function MQVisWidget(config) {
 
 
         //第二阶段
+        if(config.colorMapSelectOffset !=undefined){
+            colorMapSelectOffset=config.colorMapSelectOffset
+        }
+        if (config.onSelectColorMap != undefined) {
+            onSelectColorMap=config.onSelectColorMap
+        }
+        //控制Y的显示 2.8
         if (config.yAxisVisible != undefined) {
+            
+        }
+        //控制Y的轴段的显隐 2.7
+        if (config.yAreaVisible != undefined) {
             config.map(function (d, i) {
                 yAxis[d.index].visible = d.visible
             })
         }
+        //2.5 左右图例
         if (config.attrOpts != undefined) {
             attrOpts = config.attrOpts
             //
         }
-        
+        //线条的点击事件1.7
         if (config.onLineSelected != undefined) {
             onLineSelected = config.onLineSelected
             //线的点击事件
         }
-
+        //右属性点击事件3.1
         if (config.onRightAttrClick != undefined) {
             onRightAttrClick = config.onRightAttrClick
             //有标签的点击事件
         }
-
+        //纵轴游标起止点的点数 2.4
         if (config.hoverSelectOffset != undefined) {
             hoverSelectOffset = config.hoverSelectOffset
             //
@@ -747,7 +781,7 @@ function MQVisWidget(config) {
             .attr('width', W)
             .attr('height', H)
         //添加线条
-         _svg
+        _svg
             .select('svg.lines')
             .attr('width', W)
             .attr('height', H)
@@ -767,32 +801,13 @@ function MQVisWidget(config) {
             .attr('y2', function (d) {
                 return Y(d.rangeY)
             })
-            _zoomRoot
+        _zoomRoot
             .attr('width', W)
             .attr('height', H)
         //     _zoomRoot.on("zoom", function () { zoomed() });
         //    _zoomRoot.call(zoom)
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /**
      * 工具方法
