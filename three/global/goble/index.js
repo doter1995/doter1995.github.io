@@ -45,17 +45,40 @@ window.onload = function () {
         new THREE.MeshPhongMaterial({
             map: new THREE.TextureLoader().load(noCloudsImage),
             bumpMap: new THREE.TextureLoader().load(bumpImage),
-            bumpScale: 0.001,
+            bumpScale: 0.1,
             specularMap: new THREE.TextureLoader().load(waterImage),
             specular: new THREE.Color('grey')
         })
     );
-    groupSphere.add(sphere);
+    groupSphere.add(sphere)
+    //添加云层
+    var colundSphere = new THREE.Mesh(
+        //new THREE.SphereGeometry(radius, segments, segments),
+        new THREE.SphereGeometry(202, 55, 55),
+        new THREE.MeshBasicMaterial({
+            map: new THREE.TextureLoader().load(fairCloudsImage),
+        })
+    );
+    colundSphere.material.transparent=true
+    //添加星空
+    var starsSphere = new THREE.Mesh(
+        //new THREE.SphereGeometry(radius, segments, segments),
+        new THREE.SphereGeometry(400, 55, 55),
+        new THREE.MeshBasicMaterial({
+            map: new THREE.TextureLoader().load(galaxyImage),
+            side:THREE.BackSide,
+        })
+    );
+
+
+   
+    groupSphere.add(colundSphere);
+    groupSphere.add(starsSphere);
     scene.add(groupSphere);
-    
     //添加一个控制器
     var orbitControl = new THREE.OrbitControls(camera);
     function animate() {
+        colundSphere.rotation.y+=0.001
         renderer.setSize(window.innerWidth, window.innerHeight);
         //重复渲染
         requestAnimationFrame(animate);
