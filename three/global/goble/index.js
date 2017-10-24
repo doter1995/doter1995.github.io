@@ -78,6 +78,7 @@ window.onload = function () {
     //添加一个控制器
     var orbitControl = new THREE.OrbitControls(camera);
     function animate() {
+        console.log(camera.position);
         colundSphere.rotation.y+=0.001
         renderer.setSize(window.innerWidth, window.innerHeight);
         //重复渲染
