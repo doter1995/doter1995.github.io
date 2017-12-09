@@ -39,6 +39,7 @@ window.onload = function () {
     camera.lookAt(scene.position);
     scene.add(camera);
     var group = new THREE.Group();
+    
     scene.add(group);
 
     //添加地球仪

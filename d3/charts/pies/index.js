@@ -5,6 +5,7 @@ window.onload = function () {
     var height = window.innerHeight * .9
     var inner = 10
     var outer = 100
+    
     var root = d3.select("#root").append('svg')
         .attr('width', width)
         .attr('height', height)
