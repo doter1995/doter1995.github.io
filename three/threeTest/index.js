@@ -297,13 +297,13 @@ window.onload = function () {
     sprite5.position.set(-30,600,450)
     var sprite6 = sprite.clone()
     sprite6.position.set(-30,600,450)
-    scene.add(sprite)
-    scene.add(sprite1)
-    scene.add(sprite2)
-    scene.add(sprite3)
-    scene.add(sprite4)
-    scene.add(sprite5)
-    scene.add(sprite6)
+    group1.add(sprite)
+    group1.add(sprite1)
+    group1.add(sprite2)
+    group1.add(sprite3)
+    group1.add(sprite4)
+    group1.add(sprite5)
+    group1.add(sprite6)
 
     //添加一个控制器
     var orbitControl = new THREE.OrbitControls(camera);
@@ -318,7 +318,7 @@ window.onload = function () {
         move(planeA2,'x',[400,800],1)
         move(planeA3,'x',[-800,-300],1)
         
-        // group1.rotation.y+=0.002;
+        group1.rotation.y+=0.002;
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
