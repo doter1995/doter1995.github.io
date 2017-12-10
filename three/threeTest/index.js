@@ -318,7 +318,7 @@ window.onload = function () {
         move(planeA3,'x',[-800,-300],1)
         updateNode()
         // camera.position.rotateOnWorldAxis(new THREE.Vector3(0,1,0),0.002)
-        // group1.rotation.y+=0.002;
+        group1.rotation.y+=0.002;
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
