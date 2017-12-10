@@ -7,15 +7,19 @@ window.onload = function () {
         H: window.innerHeight,
         Root: document.getElementById('root'),
     }
+    console.log(new THREE.Projector())
     var renderer = new THREE.WebGLRenderer({ antialias: true })
+    var cssRenderer = new THREE.CSS3DRenderer();
     //建议设置大小，否则会出现锯齿
     renderer.setSize(window.innerWidth, window.innerHeight);
+    cssRenderer.setSize(window.innerWidth, window.innerHeight)
     Root.Root.appendChild(renderer.domElement)
+    // Root.Root.appendChild(cssRenderer.domElement)
     //创建场景
     var scene = new THREE.Scene();
+    var cssScene = new THREE.Scene();
     var group1 = new THREE.Group();
     scene.add(group1);
-
     //设置场景背景色
     scene.background = new THREE.Color(0x111111);
     var amblight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -41,6 +45,12 @@ window.onload = function () {
     scene.add(camera);
     //构建三个object对象，用于显示对话框
     var tipObjects = [];
+    tipObjects.push(new THREE.Object3D())
+    tipObjects.push(new THREE.Object3D())
+    tipObjects.push(new THREE.Object3D())
+    tipObjects.push(new THREE.Object3D())
+    tipObjects.push(new THREE.Object3D())
+    tipObjects.push(new THREE.Object3D())
     tipObjects.push(new THREE.Object3D())
     tipObjects.push(new THREE.Object3D())
     tipObjects.push(new THREE.Object3D())
@@ -90,7 +100,6 @@ window.onload = function () {
         objLoader.setMaterials(materials);
         objLoader.load('./models/123/123.obj', function (object) {
             object.position.set(900, 0, 1000);
-            tipObjects[0].position.set(400, 700, 1000);
             object.scale.x=50;
             object.scale.y=50;
             object.scale.z=50;
@@ -256,54 +265,44 @@ window.onload = function () {
          group1.add(planeA2)
          group1.add(planeA3)
 
-       //添加提示框
-       var nodes = document.getElementById('nodeTip');
-       
-       var tip = document.createElement( 'canvas' );
-        tip.className='tag'
-        tip.innerHTML= 'aaaaa<br/>ccccc'
-        tip.style.top= '200px';
-        tip.style.left= '200px'
-        var ctx= tip.getContext("2d");
-        ctx.font="30px Arial";
-        ctx.fillText("Hello World",10,50);
-        // document.getElementById('root').appendChild(tip);
-        var CanvasT = new THREE.CanvasTexture(tip,THREE.UVMapping)
-        var sprite = new THREE.Sprite(new THREE.SpriteMaterial({map:CanvasT}))
-        sprite.scale.set(1111,1111,1);
-        scene.add(sprite)
-
-      
+ 
+    //添加页面
+    var nodes=[]
+    for(var i=0;i<5;i++){
+        var element = document.createElement( 'div' );
+        element.className = 'tag';
+        element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')';
+        
+        var number = document.createElement( 'div' );
+        number.className = 'number';
+        number.textContent = "出气压力:120Mpa";
+        element.appendChild( number );
+        var symbol = document.createElement( 'div' );
+        symbol.className = 'symbol';
+        symbol.textContent = "温度:80°C";
+        element.appendChild( symbol );
+        var details = document.createElement( 'div' );
+        details.className = 'details';
+        details.innerHTML = "瞬时流量:0.3MIm³" + '累计流量:0.3MIm³'+i;
+        element.appendChild( details );
+        Root.Root.appendChild(element)
+        nodes.push(element);
+    }
+   
     
     // scene.add(particle);
     //添加提示
-    var textureLoader = new THREE.TextureLoader();
-    var mapC = textureLoader.load( "./models/img/sprite2.png");
-    var materialC = new THREE.SpriteMaterial( { map: mapC, color: 0xffffff, fog: true } );
-    var sprite = new THREE.Sprite( materialC );
-    sprite.scale.set( 300, 300, 1 )
-    sprite.position.set(-30,600,450)
-    var sprite1 = sprite.clone()
-    sprite1.position.set(150,200,-300)
-    var sprite2 = sprite.clone()
-    sprite2.position.set(-1000,300,400)
-    var sprite3 = sprite.clone()
+    tipObjects[0].position.set(-30,600,450)
+    tipObjects[1].position.set(150,200,-300)
+    tipObjects[2].position.set(-1000,300,400)
+    
     //加气桩
-    sprite3.position.set(900, 320, 1000)
-    var sprite4 = sprite.clone()
-    sprite4.position.set(0, 320, -1000)
+    tipObjects[3].position.set(900, 320, 1000)
+    tipObjects[4].position.set(0, 320, -1000)
 
-    var sprite5 = sprite.clone()
-    sprite5.position.set(-30,600,450)
-    var sprite6 = sprite.clone()
-    sprite6.position.set(-30,600,450)
-    group1.add(sprite)
-    group1.add(sprite1)
-    group1.add(sprite2)
-    group1.add(sprite3)
-    group1.add(sprite4)
-    group1.add(sprite5)
-    group1.add(sprite6)
+    tipObjects.forEach(function(d){
+        group1.add(d)
+    })
 
     //添加一个控制器
     var orbitControl = new THREE.OrbitControls(camera);
@@ -317,8 +316,9 @@ window.onload = function () {
         move(planeA11,'z',[600,830],1)
         move(planeA2,'x',[400,800],1)
         move(planeA3,'x',[-800,-300],1)
-        
-        group1.rotation.y+=0.002;
+        updateNode()
+        // camera.position.rotateOnWorldAxis(new THREE.Vector3(0,1,0),0.002)
+        // group1.rotation.y+=0.002;
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
@@ -334,5 +334,16 @@ window.onload = function () {
         } 
        }
         obj.position[type]+=step;        
+    }
+    function updateNode(){
+        var vector
+        var x=0,y=0
+        nodes.forEach(function(d,i){
+            vector = tipObjects[i].getWorldPosition().project(camera)
+            x=Math.round(vector.x * Root.W/2 + Root.W/2 -80)
+            y=Math.round(-vector.y * Root.H/2 + Root.H/2 -40 )
+            d.style.top=y+'px';
+            d.style.left=x+'px';
+        })
     }
 }
