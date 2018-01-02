@@ -227,8 +227,7 @@ window.onload = function () {
         }
 
         function setZoomlisent(x) {
-            svg
-                .select('g')
+            svg.select('g')
                 .exit()
                 .remove();
             zoomRect.on('mousemove', function (d) {
