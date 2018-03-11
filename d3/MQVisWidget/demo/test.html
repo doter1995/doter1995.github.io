@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>设置布局宽高：(局部更新)</div>
+    <div>
+        widget.updateOptions({width:1000,height:600})
+    </div>
+    <div>设置线段追加：(局部更新)</div>
+    <div>widget .updateOptions( { lines:[ [1.0,'2017-06-01 21:12:32','2017-08-01 21:12:38',{}] ], extLines:[ [0.9,'2017-06-01
+        21:12:32','2017-08-01 21:12:38',{}] ] } )
+    </div>
+    <div>设置XY坐标轴：(全部更新)</div>
+    <div>
+        widget.updateOptions({ xAxis:['2017-06-01 21:12:32', '2017-09-01 21:12:38'], yAxis:[[0,3,'#eee',{visible:true}]], lines:[
+        [1.0,'2017-06-01 21:12:32','2017-08-01 21:12:38',{}] ], extLines:[ [0.9,'2017-06-01 21:12:32','2017-08-01 21:12:38',{}]
+        ] })
+    </div>
+    <div>2.1</div>
+    <div>widget.updateOptions({ colorMap: [ [0, '#220000'], [0.5, '#990000'], [1.0, '#FF0000'] ] })
+    </div>
+    <div>2.2 更新为彩图范围</div>
+    <div>widget.updateOptions({colorMapSelectOffset:300000})</div>
+    <div>2.4 纵向坐标附近线段</div>
+    <div>widget.updateOptions({hoverSelectOffset:300000})</div>
+    <div>2.5更新线条及属性</div>
+    <div>
+        widget.updateOptions( { lines:[ [1.0,'2017-06-01 21:12:32','2017-08-01 21:12:38',{ leftAttr: "attr2" }] ], extLines:[ [0.9,'2017-06-01 21:12:32','2017-08-01 21:12:38',{ leftAttr: "attr1" }] ] } )
+    </div>
+    <div>2.7 控制Y轴显示</div>
+    <div>
+        widget.updateOptions({yAreaVisible: [ { index: 1, visible: true }, { index: 2, visible: false } ]})
+    </div>
+    <div>2.8 设置重点关注行</div>
+    <div>
+        widget.updateOptions({ yAxisVisible: [{ yAxis: 2.2, visible: true },{ yAxis: 6.2, visible: true }] })
+    </div>
+    <div>3.6 更新单位</div>
+    <div>widget.updateOptions({ yUnit: "米" })
+    </div>
+    <div>3.5 更新单位</div>
+    <div> widget.updateOptions({ title: "标题" })
+    </div>
+    <div>3.5 更新单位</div>
+    <div> widget.updateOptions({ title: "标题" })
+    </div>
+    <div>3.1 右属性图点击事件</div>
+    <div> widget.updateOptions({ onRightAttrClick: function(target, event, payload){ alert(target, event, payload) } })
+    </div>
+    <div>3.2 更新y轴配置</div>
+    widget.updateOptions({yAxis: [
+    [0, 2, 'rgba(10,19,51,0.8)', {
+        yAxis: [1],
+        visible: true
+    }],
+    [2, 4, 'rgba(34,42,71,0.8)', {
+        yAxis: [1],
+        visible: true
+    }],
+    [6, 8, 'rgba(57,65,91,0.8)', {
+        yAxis: [1],
+        visible: true
+    }]]})
+</body>
+
+</html>

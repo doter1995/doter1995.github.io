@@ -1,0 +1,86 @@
+.xAxis_text{
+    font-weight: 600;
+    font-size: 1em; /*x轴的文字大小*/  
+    fill:#000;  /*x轴的文字颜色*/
+}
+.bar_text{
+    font-size: 0.9em; /*矩形的文字*/
+    font-weight: 600;
+    fill:#fff;
+}
+.tip_line{
+    font-size:1em;
+    font-weight: 600;
+    margin-top:10px;
+}
+.yAxis text{
+    fill:#000;
+    font-size:0.7em;
+    font-weight: 600;
+}
+.divTipRight{
+    width: 160px;
+    height:80px;
+    background-color:rgba(255, 251, 251, 0.712);
+    position: absolute;
+    top:40px;
+    left:40px;
+    padding: 5px;
+    font-weight: 700;
+    border-radius: 10px;
+    color:#1E197C;
+}
+.divTipRight:before{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    left: 10px;
+    top: 65px;
+    border-top: -10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+.divTipRight:after{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    left: 80px;
+    top: 90px;
+    border-top: 7px solid rgba(255, 251, 251, 0.712);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+}
+.divTipLeft{
+    width: 160px;
+    height:80px;
+    background-color:rgba(255, 251, 251, 0.712);
+    position: absolute;
+    top:40px;
+    left:40px;
+    padding: 5px;
+    font-weight: 700;
+    border-radius: 10px;
+    color:#1E197C;
+}
+.divTipLeft:before{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    left: 159px;
+    top: 8px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+.divTipLeft:after{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    left: 80px;
+    top: -8px;
+    border-bottom: 8px solid rgba(255, 251, 251, 0.712);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+}
