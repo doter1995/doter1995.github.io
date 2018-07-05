@@ -42,8 +42,8 @@ window.onload = function () {
     });
     var draged = d3.drag()
         .on('drag', function (d) {
-            x += d3.event.dx / 10;
-            y -= d3.event.dy / 10;
+            x += d3.event.dx / 4;
+            y -= d3.event.dy / 4;
             var path = d3.geoPath(projection.rotate([x, y, 0]))
             svg.select("path.pathLine")
                 .transition()
