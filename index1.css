@@ -1,0 +1,74 @@
+*{margin: 0;padding:0}
+body{
+    width: 100%;
+    background: #eee;
+}
+a{
+    text-decoration: none;
+    color: #aaa;
+}
+nav{
+    width: 100%;
+    height: 40%;
+    background-color: #333;
+    background-size: 100%,60%;
+    background-repeat: no-repeat;
+    min-height: 260px;
+    text-align: center;
+}
+
+.myNetName{
+   float: right;
+    font-size: 1.3em;
+    color: #AB9393;
+    margin-right: 40px;
+}
+nav>h1 {
+    color: #eee;
+    font-size: 2.2em;
+}
+.container{
+    width: 80%;
+    float: left;
+    margin-left: 10%;
+}
+.left{
+    display: inline-block;
+    width: 45%
+}
+.left>span{
+    font-size: 1.4em;
+    font-weight: 700;
+}
+li{
+    list-style:none;
+    margin-bottom: 10px;
+    margin-left: 15px;
+}
+.right{
+    float: right;
+    display: inline-block;
+    margin-bottom: 40px;
+    width: 55%;
+}
+.right span{
+    font-size: 1.4em;
+}
+.right .time{
+    font-size: 1em;
+    color: #938A8A;
+}
+.my_jianshu{
+    margin-left: 40px;
+    font-size: 1.2em; 
+    margin: 10px auto;
+}
+.p_title{
+        font-size: 1.2em;
+}
+.music_tip{
+    position: fixed;
+    top:10px;
+    left: 10px;
+    color: #eee;
+}

@@ -1,0 +1,39 @@
+{
+    "d3": [{
+        "title": "基础布局",
+        "links": [{
+            "link": "./d3/charts/pies/",
+            "title": "pies"
+        }, {
+            "link": "./d3/charts/tree/",
+            "title": "tree"
+        }, {
+            "link": "./d3/charts/treeMap/",
+            "title": "treeMap"
+        }, {
+            "link": "./d3/charts/partition/",
+            "title": "partition分区图"
+        }, {
+            "link": "./d3/charts/pack/",
+            "title": "pack 包"
+        }, {
+            "link": "./d3/charts/histogram/",
+            "title": "histogram 直方图"
+        }, {
+            "link": "./d3/charts/stack/",
+            "title": "stack 堆栈图"
+        }, {
+            "link": "./d3/charts/force/",
+            "title": "force 力向导图"
+        }, {
+            "link": "./d3/charts/force.html",
+            "title": "力向导图v3"
+        }, {
+            "link": "./d3/charts/brush/",
+            "title": "刷子"
+        }, {
+            "link": "./d3/charts/geo/",
+            "title": "地理"
+        }]
+    }]
+}

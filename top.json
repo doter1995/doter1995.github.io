@@ -1,23 +1,28 @@
 {
     "left": [{
         "title": "I'm Doter",
-        "link": "/"
+        "link": "/",
+        "newTable": false
     }],
     "right": [{
             "title": "D3",
-            "link": "http://www.jianshu.com/u/5721922d1d60"
+            "link": "http://www.jianshu.com/u/5721922d1d60",
+            "newTable": false
         },
         {
             "title": "THREE",
-            "link": "http://www.jianshu.com/u/5721922d1d60"
+            "link": "http://www.jianshu.com/u/5721922d1d60",
+            "newTable": false
         },
         {
             "title": "Github",
-            "link": "https://github.com/doter1995/"
+            "link": "https://github.com/doter1995/",
+            "newTable": true
         },
         {
             "title": "简书",
-            "link": "https://www.jianshu.com/u/5721922d1d60"
+            "link": "https://www.jianshu.com/u/5721922d1d60",
+            "newTable": true
         }
     ]
 }

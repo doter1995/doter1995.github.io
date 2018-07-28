@@ -1,74 +1,90 @@
-*{margin: 0;padding:0}
-body{
-    width: 100%;
-    background: #eee;
-}
-a{
-    text-decoration: none;
-    color: #aaa;
-}
-nav{
-    width: 100%;
-    height: 40%;
-    background-color: #333;
-    background-size: 100%,60%;
-    background-repeat: no-repeat;
-    min-height: 260px;
-    text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
 }
 
-.myNetName{
-   float: right;
-    font-size: 1.3em;
-    color: #AB9393;
-    margin-right: 40px;
+a {
+  display: inline-block;
+  text-decoration-line: none;
+  color: #591;
 }
-nav>h1 {
-    color: #eee;
-    font-size: 2.2em;
+
+body {
+  background-color: rgb(23, 23, 23);
+  width: 100%;
+  color: rgb(200, 200, 200);
 }
-.container{
-    width: 80%;
-    float: left;
-    margin-left: 10%;
+
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
-.left{
-    display: inline-block;
-    width: 45%
+
+.top {
+  display: flex;
+  width: 100%;
+  background-color: rgba(155, 155, 155, .8);
+  flex-direction: row;
+  justify-content: space-between;
 }
-.left>span{
-    font-size: 1.4em;
-    font-weight: 700;
+
+.top a {
+  padding: 10px;
+  width: 80px;
 }
-li{
-    list-style:none;
-    margin-bottom: 10px;
-    margin-left: 15px;
+
+.top a:hover {
+  background-color: aliceblue;
 }
-.right{
-    float: right;
-    display: inline-block;
-    margin-bottom: 40px;
-    width: 55%;
+
+.top ul {}
+
+.top li {
+  text-align: center;
+  width: 80px;
+  padding: 20px;
+  display: inline-block;
 }
-.right span{
-    font-size: 1.4em;
+
+.top li:hover {
+  background-color: #591;
 }
-.right .time{
-    font-size: 1em;
-    color: #938A8A;
+
+.middle {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
-.my_jianshu{
-    margin-left: 40px;
-    font-size: 1.2em; 
-    margin: 10px auto;
+
+.table {
+  width: 100%;
 }
-.p_title{
-        font-size: 1.2em;
+
+.table .title {
+  background-color: #591;
 }
-.music_tip{
-    position: fixed;
-    top:10px;
-    left: 10px;
-    color: #eee;
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.card {
+  background-color: #767;
+  margin: 8px;
+  width: 400px;
+  height: 300px;
+  flex: 1;
+}
+
+.card_title {
+  padding: 5px;
+  width: 400px;
+  background-color: rgba(155, 155, 155, .2)
 }
