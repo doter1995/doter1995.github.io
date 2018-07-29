@@ -26,13 +26,17 @@
 <script src="./index.js"></script>
 <script>
     console.log(location.hash)
-    let hashLink = location.hash
-    let iframe = d3.select('#iframe')
-    if (hashLink == "") {
-        iframe.attr('src', 'index.1.html')
-    } else {
-        iframe.attr('src', hashLink.substring(1, hashLink.length));
+    let reSetouter = () => {
+        let hashLink = location.hash
+        let iframe = d3.select('#iframe')
+        if (hashLink == "") {
+            iframe.attr('src', 'index.1.html')
+        } else {
+            iframe.attr('src', hashLink.substring(1, hashLink.length));
+        }
     }
+    window.onhashchange = reSetouter;
+    reSetouter();
 </script>
 
 </html>
