@@ -1,8 +1,9 @@
-window.onload = function() {
+let init = () => {
   initTopBar();
-  initD3();
+  d3.select("#iframe")
+    .attr("height", window.innerHeight - 65)
+    .attr("width", window.innerWidth);
 };
-
 // init top bar
 let initTopBar = () => {
   fetch("./top.json")
@@ -61,3 +62,4 @@ let initD3 = () => {
     cards.append("div");
   };
 };
+init();

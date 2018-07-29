@@ -20,15 +20,19 @@
         </nav>
         <div class="fill_nav" />
     </header>
-    <div class="container">
-
-        <div class="middle" id="middle">
-
-        </div>
-        <div class="foot">cc</div>
-    </div>
+    <iframe id="iframe"></iframe>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="./index.js"></script>
+<script>
+    console.log(location.hash)
+    let hashLink = location.hash
+    let iframe = d3.select('#iframe')
+    if (hashLink == "") {
+        iframe.attr('src', 'index.1.html')
+    } else {
+        iframe.attr('src', hashLink.substring(1, hashLink.length));
+    }
+</script>
 
 </html>
