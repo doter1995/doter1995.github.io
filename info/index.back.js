@@ -1,12 +1,14 @@
 var w = (c.width = window.innerWidth),
   h = (c.height = window.innerHeight),
   ctx = c.getContext("2d"),
-  count = ((w * h) / 3000) | 0,
-  speed = 4,
+  count = ((w * h) / 15000) | 0,
+  speed = 5,
   range = 80,
   lineAlpha = 0.05,
   particles = [],
   huePart = 360 / count;
+let x, y;
+let p1, p2;
 
 for (var i = 0; i < count; ++i) particles.push(new Particle((huePart * i) | 0));
 
@@ -27,8 +29,8 @@ Particle.prototype.update = function() {
 };
 
 function checkDist(a, b, dist) {
-  var x = a.x - b.x,
-    y = a.y - b.y;
+  x = a.x - b.x;
+  y = a.y - b.y;
 
   return x * x + y * y <= dist * dist;
 }
@@ -38,13 +40,12 @@ function anim() {
 
   ctx.fillStyle = "rgba(0, 0, 0, .05)";
   ctx.fillRect(0, 0, w, h);
-
   for (var i = 0; i < particles.length; ++i) {
-    var p1 = particles[i];
+    p1 = particles[i];
     p1.update();
 
     for (var j = i + 1; j < particles.length; ++j) {
-      var p2 = particles[j];
+      p2 = particles[j];
       if (checkDist(p1, p2, range)) {
         ctx.strokeStyle = "hsla(hue, 80%, 50%, alp)"
           .replace("hue", ((p1.hue + p2.hue + 3) / 2) % 360)

@@ -1,0 +1,25 @@
+.xAxis path {
+    fill: #eee;
+    stroke-width: 5px;
+    stroke: #eee;
+}
+
+.xAxis line {
+    stroke: #eee;
+}
+
+.xAxis text {
+    stroke: #eee;
+}
+
+#tip {
+    position: fixed;
+    display: none;
+    padding: 10px;
+    background-color: rgba(15, 65, 146, 0.7);
+    color: #eee;
+}
+
+.info {
+    margin-top: 20px;
+}
