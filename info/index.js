@@ -105,6 +105,7 @@ let Chart = (root, src, config) => {
     tip.select(".title").text(d => d.title);
     tip.select(".company").text(d => d.company);
     tip.select(".info").text(d => d.info);
+    d3.select("body").on("click", () => updateDraw(++Item_Idx, dataSet));
     d3.select("#tip").on("click", () => updateDraw(++Item_Idx, dataSet));
   };
   //更新绘制
@@ -115,21 +116,22 @@ let Chart = (root, src, config) => {
       i = 0;
     }
     let item = dataSet[i];
+    //更新内容
+    let tip = d3.select("#tip").datum(dataSet[i]);
+    tip.select(".title").text(d => d.title);
+    tip.select(".company").text(d => d.company);
+    tip.select(".info").text(d => d.info);
     //更新时间轴
     if (item.endDate == "") {
       x.domain([parseDate(item.startDate), new Date().valueOf()]);
+      tip.select(".date").text(d => `${d.startDate}--至今`);
     } else {
       x.domain([parseDate(item.startDate), parseDate(item.endDate)]);
+      tip.select(".date").text(d => `${d.startDate}--${d.endDate}`);
     }
     xAxisG.call(xAxis);
     xAxisG.selectAll("line").attr("y2", 20);
     xAxisG.selectAll("text").attr("y", 30);
-    //更新内容
-    let tip = d3.select("#tip").datum(dataSet[i]);
-    tip.select(".date").text(d => `${d.startDate}--${d.endDate}`);
-    tip.select(".title").text(d => d.title);
-    tip.select(".company").text(d => d.company);
-    tip.select(".info").text(d => d.info);
   };
   //更新背景色
   let updateColor = (i = 1) => {

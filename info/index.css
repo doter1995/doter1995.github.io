@@ -1,11 +1,11 @@
 .xAxis path {
-    fill: #eee;
+    fill: rgb(100, 248, 253);
     stroke-width: 5px;
-    stroke: #eee;
+    stroke: rgb(100, 248, 253);
 }
 
 .xAxis line {
-    stroke: #eee;
+    stroke: rgb(100, 248, 253);
 }
 
 .xAxis text {
@@ -14,9 +14,8 @@
 
 #tip {
     position: fixed;
-    display: none;
     padding: 10px;
-    background-color: rgba(15, 65, 146, 0.7);
+    background-color: rgba(15, 25, 50, 0.3);
     color: #eee;
 }
 

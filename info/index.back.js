@@ -1,7 +1,7 @@
 var w = (c.width = window.innerWidth),
   h = (c.height = window.innerHeight),
   ctx = c.getContext("2d"),
-  count = ((w * h) / 15000) | 0,
+  count = ((w * h) / 3000) | 0,
   speed = 5,
   range = 80,
   lineAlpha = 0.05,
@@ -36,8 +36,6 @@ function checkDist(a, b, dist) {
 }
 
 function anim() {
-  window.requestAnimationFrame(anim);
-
   ctx.fillStyle = "rgba(0, 0, 0, .05)";
   ctx.fillRect(0, 0, w, h);
   for (var i = 0; i < particles.length; ++i) {
@@ -57,6 +55,7 @@ function anim() {
       }
     }
   }
+  setTimeout(() => window.requestAnimationFrame(anim), 10);
 }
 
 anim();
