@@ -1,23 +1,38 @@
-window.onload = function() {
-  console.log("Aa");
-
-  init();
-};
-
 let init = () => {
-  console.log(window.innerHeight);
-  var root = d3
-    .select("#root")
-    .append("svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight);
-  initChart(root, "./information.json");
+  initD3();
 };
-let initChart = (root, src) => {
-  fetch(src)
+let initD3 = () => {
+  fetch("./d3.json")
     .then(data => data.json())
-    .then(dataSet => {});
-  let draw = dataSet => {
-    root.select();
+    .then(data => initMiddle(data.d3));
+  let initMiddle = data => {
+    let tableNode = d3
+      .select("#root")
+      .selectAll("div")
+      .data(data)
+      .enter()
+      .append("div")
+      .attr("class", "table");
+
+    tableNode
+      .append("div")
+      .attr("class", "title")
+      .text(item => item.title);
+    let tableCard = tableNode.append("div").attr("class", "cards");
+    let cards = tableCard
+      .selectAll("a")
+      .data(item => item.links)
+      .enter()
+      .append("a")
+      .attr("href", d => d.link)
+      .attr("class", "card")
+      .append("div");
+    cards
+      .append("div")
+      .attr("class", "card_title")
+      .text(item => item.title);
+    cards.append("div").text("a");
+    cards.append("div");
   };
 };
+init();

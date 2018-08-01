@@ -1,0 +1,36 @@
+#c {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: content-box;
+    width: 100%;
+}
+
+body {
+    background-color: aliceblue;
+}
+
+.table {
+    width: 100%;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: initial;
+    justify-content: center;
+    flex-shrink: initial;
+}
+
+.cards a {
+    flex-direction: column;
+    flex-basis: 400px;
+    min-width: 400px;
+    max-width: 420px;
+    height: 400px;
+    display: inline-block;
+}
