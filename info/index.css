@@ -1,24 +1,24 @@
 .xAxis path {
-    fill: rgb(100, 248, 253);
-    stroke-width: 5px;
-    stroke: rgb(100, 248, 253);
+  fill: rgb(100, 248, 253);
+  stroke-width: 5px;
+  stroke: rgb(100, 248, 253);
 }
 
 .xAxis line {
-    stroke: rgb(100, 248, 253);
+  stroke: rgb(100, 248, 253);
 }
 
 .xAxis text {
-    stroke: #eee;
+  stroke: #eee;
 }
 
 #tip {
-    position: fixed;
-    padding: 10px;
-    background-color: rgba(15, 25, 50, 0.3);
-    color: #eee;
+  position: fixed;
+  padding: 10px;
+  background-color: rgba(15, 25, 50, 0.3);
+  color: #eee;
 }
 
 .info {
-    margin-top: 20px;
+  margin-top: 20px;
 }

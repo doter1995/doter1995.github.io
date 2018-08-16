@@ -57,4 +57,5 @@ header div:last-child {
 #iframe {
   width: 100%;
   border: none;
+  overflow: "auto";
 }

@@ -20,19 +20,26 @@ let initD3 = () => {
       .text(item => item.title);
     let tableCard = tableNode.append("div").attr("class", "cards");
     let cards = tableCard
-      .selectAll("a")
+      .selectAll("div")
       .data(item => item.links)
       .enter()
-      .append("a")
-      .attr("href", d => d.link)
-      .attr("class", "card")
-      .append("div");
-    cards
       .append("div")
+      .attr("class", "card");
+
+    cards
+      .append("a")
       .attr("class", "card_title")
+      .on("click", d => {
+        if (window.parent) {
+          console.log(parent);
+          let link = d.link.substring(2, d.link.length);
+          window.parent.location.href += link;
+        } else {
+          window.location.href = d.link;
+        }
+      })
       .text(item => item.title);
-    cards.append("div").text("a");
-    cards.append("div");
+    cards.append("p").text("a");
   };
 };
 init();
