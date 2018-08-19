@@ -111,7 +111,7 @@ let Chart = (root, src, config) => {
   //更新绘制
   let updateDraw = (i, dataSet) => {
     console.log("aaaaaaa");
-    if (i >= dataSet.length) {
+    if (i > dataSet.length) {
       Item_Idx = 0;
       i = 0;
     }
