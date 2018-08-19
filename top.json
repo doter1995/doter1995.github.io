@@ -1,28 +1,28 @@
 {
-    "left": [{
-        "title": "I'm Doter",
-        "link": "/",
-        "newTable": false
-    }],
-    "right": [{
-            "title": "D3",
-            "link": "./#d3/",
-            "newTable": false
-        },
-        {
-            "title": "THREE",
-            "link": "./#d3/",
-            "newTable": false
-        },
-        {
-            "title": "Github",
-            "link": "https://github.com/doter1995/",
-            "newTable": true
-        },
-        {
-            "title": "简书",
-            "link": "https://www.jianshu.com/u/5721922d1d60",
-            "newTable": true
-        }
-    ]
+  "left": [{
+    "title": "I'm Doter",
+    "link": "/",
+    "newTable": false
+  }],
+  "right": [{
+      "title": "D3",
+      "link": "./#d3/",
+      "newTable": false
+    },
+    {
+      "title": "THREE",
+      "link": "./#d3/",
+      "newTable": false
+    },
+    {
+      "title": "Github",
+      "link": "https://github.com/doter1995/",
+      "newTable": true
+    },
+    {
+      "title": "Blog",
+      "link": "https://www.jianshu.com/u/5721922d1d60",
+      "newTable": true
+    }
+  ]
 }

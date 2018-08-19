@@ -3,7 +3,6 @@ window.onload = function() {
 };
 
 let init = () => {
-  console.log(window.innerHeight);
   var root = d3
     .select("#root")
     .append("svg")
@@ -32,9 +31,13 @@ let Chart = (root, src, config) => {
   let x;
   let xAxis;
   let xAxisG;
-  let textBox;
   let sidePath;
   let Item_Idx = 0;
+  let side_path = d3
+    .line()
+    .curve(d3.curveLinearClosed)
+    .x(d => d[0])
+    .y(d => d[1]);
   let initFilter = id => {
     root
       .append("defs")
@@ -47,7 +50,6 @@ let Chart = (root, src, config) => {
   };
   // 初始化绘制
   let initDraw = dataSet => {
-    console.log(dataSet);
     let startDate = parseDate(dataSet[0].startDate);
     let newDate = new Date().valueOf();
     let heightCneter = config.height / 2;
@@ -80,18 +82,13 @@ let Chart = (root, src, config) => {
       [(widthRight * 5) / 4, heightCneter - 40],
       [x(newDate), 70] //右上
     ]; //右中
-    let path = d3
-      .line()
-      .curve(d3.curveLinearClosed)
-      .x(d => d[0])
-      .y(d => d[1]);
     sidePath
       .data([leftpos])
       .append("path")
       .attr("opacity", 0.5)
       .attr("fill", color(0))
       .attr("filter", `url(${initFilter("pathFilter")})`)
-      .attr("d", path);
+      .attr("d", side_path);
     //绘制一个文本显示框
     let tip = d3
       .select("#tip")
@@ -105,13 +102,12 @@ let Chart = (root, src, config) => {
     tip.select(".title").text(d => d.title);
     tip.select(".company").text(d => d.company);
     tip.select(".info").text(d => d.info);
-    d3.select("body").on("click", () => updateDraw(++Item_Idx, dataSet));
-    d3.select("#tip").on("click", () => updateDraw(++Item_Idx, dataSet));
+    d3.select("body").on("click", () => updateDraw(Item_Idx++, dataSet));
+    // d3.select("#tip").on("click", () => updateDraw(Item_Idx++, dataSet));
   };
   //更新绘制
   let updateDraw = (i, dataSet) => {
-    console.log("aaaaaaa");
-    if (i > dataSet.length) {
+    if (i >= dataSet.length) {
       Item_Idx = 0;
       i = 0;
     }
@@ -122,16 +118,27 @@ let Chart = (root, src, config) => {
     tip.select(".company").text(d => d.company);
     tip.select(".info").text(d => d.info);
     //更新时间轴
-    if (item.endDate == "") {
+    console.log(item);
+    if (!item.endDate || item.endDate == "") {
       x.domain([parseDate(item.startDate), new Date().valueOf()]);
       tip.select(".date").text(d => `${d.startDate}--至今`);
     } else {
       x.domain([parseDate(item.startDate), parseDate(item.endDate)]);
       tip.select(".date").text(d => `${d.startDate}--${d.endDate}`);
     }
-    xAxisG.call(xAxis);
-    xAxisG.selectAll("line").attr("y2", 20);
-    xAxisG.selectAll("text").attr("y", 30);
+    xAxis.scale(x);
+    xAxisG
+      .transition()
+      .duration(1000)
+      .call(xAxis)
+      .on("end", function() {
+        d3.select(this)
+          .selectAll("line")
+          .attr("y2", 20);
+        d3.select(this)
+          .selectAll("text")
+          .attr("y", 30);
+      });
   };
   //更新背景色
   let updateColor = (i = 1) => {
