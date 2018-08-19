@@ -102,7 +102,7 @@ let Chart = (root, src, config) => {
     tip.select(".title").text(d => d.title);
     tip.select(".company").text(d => d.company);
     tip.select(".info").text(d => d.info);
-    d3.select("body").on("click", () => updateDraw(Item_Idx++, dataSet));
+    d3.select("body").on("click", () => updateDraw(++Item_Idx, dataSet));
     // d3.select("#tip").on("click", () => updateDraw(Item_Idx++, dataSet));
   };
   //更新绘制
