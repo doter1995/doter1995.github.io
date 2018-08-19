@@ -2,41 +2,42 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>I'm Doter</title>
-    <link rel="stylesheet" href="./index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>I'm Doter</title>
+  <style font-display="auto"></style>
+  <link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
-    <header>
-        <h1 class="hidden">doter blog</h1>
-        <nav class="nav">
-            <ul id="top_left">
-            </ul>
-            <ul id="top_right">
-            </ul>
-        </nav>
-        <div class="fill_nav" />
-    </header>
-    <iframe id="iframe"></iframe>
+  <header>
+    <h1 class="hidden">doter blog</h1>
+    <nav class="nav">
+      <ul id="top_left">
+      </ul>
+      <ul id="top_right">
+      </ul>
+    </nav>
+    <div class="fill_nav" />
+  </header>
+  <iframe id="iframe"></iframe>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="./index.js"></script>
 <script>
-    console.log(location.hash)
-    let reSetouter = () => {
-        let hashLink = location.hash
-        let iframe = d3.select('#iframe')
-        if (hashLink == "") {
-            iframe.attr('src', './info/')
-        } else {
-            iframe.attr('src', hashLink.substring(1, hashLink.length));
-        }
+  console.log(location.hash)
+  let reSetouter = () => {
+    let hashLink = location.hash
+    let iframe = d3.select('#iframe')
+    if (hashLink == "") {
+      iframe.attr('src', './info/')
+    } else {
+      iframe.attr('src', hashLink.substring(1, hashLink.length));
     }
-    window.onhashchange = reSetouter;
-    reSetouter();
+  }
+  window.onhashchange = reSetouter;
+  reSetouter();
 </script>
 
 </html>
