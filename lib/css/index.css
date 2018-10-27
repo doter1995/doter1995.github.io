@@ -13,25 +13,27 @@ body {
   background-color: aliceblue;
 }
 
-#root {}
-
 .table {
   background-color: #96969611;
-  width: 60%;
+  width: 70%;
   margin: 0 auto;
 }
-.title{
+
+.title {
   border-top: 1px solid #222222a6;
-  padding: 1.2rem 0;
+  padding: 1.2rem 15px;
   font-size: 1.3rem;
-  background: linear-gradient(0,#2365de,#23bfd8);
+  background: linear-gradient(0, #2365de, #23bfd8);
   font-weight: 900;
   border-bottom: 1px solid #222222a6;
+  box-sizing: border-box;
 }
-.cards{
+
+.cards {
   padding: 0 2%;
   box-sizing: border-box;
 }
+
 .card {
   position: relative;
   width: 100%;
@@ -56,6 +58,6 @@ body {
 }
 
 .card p {
-  text-indent:2em;
+  text-indent: 2em;
   color: #817c83;
 }

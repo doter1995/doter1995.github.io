@@ -8,7 +8,7 @@ let init = () => {
     .append("svg")
     .attr("width", window.innerWidth)
     .attr("height", window.innerHeight);
-  Chart(root, "./information.json", {
+  Chart(root, "/config/information.json", {
     width: window.innerWidth,
     height: window.innerHeight
   });
