@@ -33,8 +33,6 @@ window.onload = function () {
         .force("center", d3.forceCenter(width / 2, height / 2))	  //重力，布局有一个参考位置，不会跑偏
         .on('tick', tick)
 
-    console.log("dataSet.nodes_data", dataSet.nodes_data)
-    console.log("dataSet.edges_data", dataSet.edges_data)
 
     var dragged = d3.drag()
         .container(document.getElementsByTagName("svg")[0])
@@ -48,7 +46,6 @@ window.onload = function () {
             d.fy = d3.event.y;
         }) //mousemove
         .on('end', function (d) {
-            console.log(d3.event.subject)
             if (!d3.event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
@@ -81,7 +78,6 @@ window.onload = function () {
         .attr('fill', function (d, i) { return color(i) })
         .call(dragged)
 
-    console.log("event", dragged)
     function tick() {
         link.attr('x1', function (d) { return d.source.x })
             .attr('y1', function (d) { return d.source.y })

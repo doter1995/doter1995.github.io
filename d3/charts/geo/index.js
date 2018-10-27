@@ -19,7 +19,6 @@ window.onload = function () {
         .rotate([x, y, 0])
     var path = d3.geoPath(projection)
     var Graticule = d3.geoGraticule()//创建经纬线
-    console.log(Graticule)
     svg.append('g')
         .attr('class', 'graticule')
         .append('path')
@@ -32,7 +31,6 @@ window.onload = function () {
         if (error) throw error;
 
         dataSet = topojson.mesh(world)
-        console.log(dataSet)
         svg.insert("path", ".graticule")
             .datum(dataSet)
             .attr("class", 'pathLine')

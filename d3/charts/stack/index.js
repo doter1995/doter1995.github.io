@@ -5,7 +5,6 @@ window.onload = function () {
     var margin = 20
     var width = W - 2 * margin
     var height = H - 2 * margin
-    console.log(width,height)
     
     var inner = 10
     var outer = 100
@@ -45,7 +44,6 @@ window.onload = function () {
     var stack = d3.stack().keys(["apple", "bananas", "cherries", "dates"])
     var data = stack(dataSet)
     var doMain = dataSet.map(function (d) { return d.year })
-    console.log(doMain)
     //x y 比例尺
     var scaleX = d3.scaleBand()
         .domain(doMain)
@@ -55,9 +53,7 @@ window.onload = function () {
     var scaleZ = d3.scaleOrdinal()
     .domain(["apple", "bananas", "cherries", "dates"])
     .range([color(1),color(2),color(3),color(4)])
-    console.log(data)
     var maxYRange = d3.max(dataSet, function (d) { return (d.apple + d.bananas+d.cherries+d.dates) });
-    console.log(maxYRange)
     var scaleY = d3.scaleLinear()
         .domain([0,maxYRange])
         .range([height, 0])
@@ -73,12 +69,9 @@ window.onload = function () {
         .data(function (d) { return d })
         .enter()
         .append('rect')
-        .each(function (d, i) {
-            console.log(d, i);
-        })
         .attr('stroke','#000')
         .attr("x", function (d, i) { return scaleX(d.data.year) })
-        .attr('y', function (d, i) {console.log(d); return scaleY(d[1])})
+        .attr('y', function (d, i) { return scaleY(d[1])})
         .attr('height', function (d, i) { return scaleY(d[0]) - scaleY(d[1]);})
         .attr('width', scaleX.bandwidth())
 

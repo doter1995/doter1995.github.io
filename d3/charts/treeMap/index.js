@@ -73,8 +73,6 @@ window.onload = function () {
         .tile(d3.treemapBinary)
     var nodes = treemap(root);
     
-    console.log(nodes.descendants())
-
     //准备绘制
     var threeNode = svg.append("g")
         .attr('class', 'treeG')

@@ -349,7 +349,6 @@ function LineChart(config) {
         console.log(xTickValue)
         //修改轴颜色
         updateXAxisColor();
-        // console.log(xTickValue);
         xAxis.transition()
             .duration(t)
             .call(d3.axisBottom(xx)

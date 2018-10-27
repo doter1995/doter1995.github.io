@@ -70,11 +70,9 @@ function GitChain(config) {
       .html(config.title)
     //预处理数据
     var dataSet = formatData(data)
-    console.log(dataSet)
     //获取图表的长度
     var length = dataSet.data[dataSet.data.length - 1].index
     var Hlength = length * itemMargin1 //拿到长度
-    console.log('length,Hlength', length, Hlength)
     rootNode = Node.append('svg')
       .attr('width', width-10)
       .attr('height', height - 20)
@@ -84,7 +82,6 @@ function GitChain(config) {
       if (isSortTime) {
         return d
       } else {
-        console.log('d', d, Hlength - d)
         return Hlength - d
       }
     }
@@ -148,11 +145,9 @@ function GitChain(config) {
       linkNode.append('circle')
         .datum(d)
         .attr('cx', function (d) {
-          console.log(dataSet.classes.indexOf(d.to),d)
           return itemMargin * (dataSet.classes.indexOf(d.to))
         })
         .attr('cy', function (d) {
-          console.log('cy',Y(itemMargin1 * d.index),d)
           return Y(itemMargin1 * d.index)
         })
         .attr('r', function (d) {
@@ -186,14 +181,11 @@ function GitChain(config) {
           .on('mouseout', function (d) { select({ index: -1 }) })
         //每一行,第一打印
         var userData = getTitle(dataSet, titltData)
-        console.log(titltData.index, userData)
         var dataString = ""
         dataSet.user.forEach(function (d, ii) {
          if(userData.user.indexOf(d)!=-1){//匹配到用户
           dataString+=' '+ d//打印用户
-          console.log(userData.user.indexOf(d))
           var textData = userData.data[userData.user.indexOf(d)]
-          console.log(textData)
           if(textData.create.to.length>0){//有创建
             dataString+=getType('create')
             textData.create.to.forEach(function(d,i){
@@ -205,7 +197,6 @@ function GitChain(config) {
           if(textData.use.to.length>0){//有使用
             dataString+=frist==0?"":tipDot
             dataString+=getType('use')
-            console.log('use', textData.use)
             textData.use.to.forEach(function(d,i){
               dataString +=i>0?tipDot:''
               dataString += getTag(d)
@@ -254,7 +245,6 @@ function GitChain(config) {
             }
           })
           if(Allow_use){
-            console.log('textLength',dataString.length)
             var useTip = linkTitle.append('g').datum(d)
             useTip.append('rect')
               .attr('class','tip_use_back')
@@ -290,13 +280,11 @@ function GitChain(config) {
       dataSet.state[d.to].index = d.index
 
     })
-    console.log(dataSet)
   }
 
   render()
 
   function select(data) {
-    console.log('select', data)
     backGround.selectAll('rect')
       .attr('opacity', opacity[0])
       .filter(function (d) {
@@ -380,7 +368,6 @@ function GitChain(config) {
       })
      //数组排序
      dataSet.data = data
-    console.log("data",data)
     //刷选出来对应的分支类型
     var time = 'a'
     var index = -1
@@ -466,7 +453,6 @@ function GitChain(config) {
     var userData = {user:[],data:[]};
     //合并算法
     dataSet.data.forEach(function (v, ind) {
-      console.log(v, titltData.index, v.index)
       if (v.index == titltData.index) {
         if (userData.user.indexOf(v.user)==-1) {//创建用户
           userData.user.push(v.user)
@@ -477,7 +463,6 @@ function GitChain(config) {
         }
       }
     })
-    console.log(userData)
     return userData
 
   }

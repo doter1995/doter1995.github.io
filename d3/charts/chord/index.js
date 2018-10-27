@@ -39,13 +39,12 @@ window.onload = function () {
             .sortSubgroups(d3.descending)
             .sortChords(d3.ascending);
         var resource = chord(dataSet)
-        console.log(resource)
         group.datum(resource)
         var g = group
             .append('g')
             .attr('class', 'group')
             .selectAll('g')
-            .data(function (d) { console.log(d); return d.groups })
+            .data(function (d) { return d.groups })
             .enter()
             .append('g')
         function fade(opacity) {
@@ -67,7 +66,7 @@ window.onload = function () {
         var innergroup = group.append("g")
             .attr("class", "chord")
             .selectAll("chord")
-            .data(function (chords) { console.log(chords); return chords })
+            .data(function (chords) { return chords })
             .enter()
             .append("path")
             .attr("d", ribbon)

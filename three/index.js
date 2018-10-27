@@ -39,7 +39,7 @@ let initD3 = () => {
         }
       })
       .text(item => item.title);
-    cards.append("p").text("a");
+    cards.append("p").text(item=>item.description);
   };
 };
 init();

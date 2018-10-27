@@ -43,14 +43,11 @@ window.onload = function () {
     function brushended() {
         if (!d3.event.sourceEvent) return; // Only transition after input.
         if (!d3.event.selection) return; // Ignore empty selections.
-        console.log('d3.event.selection', d3.event.selection)
-        console.log('d3.timeDay.round', d3.timeDay.round)
         //selection为获取到的当前的鼠标选中的x0 x1的值
         //然后通过x.invert将x0 x1反转为x对应点
         var d0 = d3.event.selection.map(x.invert),
             //
             d1 = d0.map(d3.timeDay.round);
-            console.log(d1)
         // round function (date) {
         //     var d0 = interval(date),
         //         d1 = interval.ceil(date);

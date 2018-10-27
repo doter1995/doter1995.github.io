@@ -12,12 +12,10 @@ window.onload = function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     Root.Root.appendChild(renderer.domElement)
     var stats = new Stats();
-    console.log(stats)
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.left = "320px";
     stats.domElement.style.top = "10px";
     Root.Root.appendChild(stats.dom);
-    console.log(stats)
     //创建场景
     var scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
@@ -55,7 +53,6 @@ window.onload = function () {
                 side: THREE.BackSide,
                 map: new THREE.TextureLoader().load('img/' + imgs[i] + '.jpg')
             })
-            console.log(i)
         }
         return materiales
     }
@@ -85,7 +82,6 @@ window.onload = function () {
         raycaster.setFromCamera(mouse, camera);
         var intersects = []
         intersects = raycaster.intersectObjects(meshGroup.children, true);
-        console.log("监测", intersects, meshGroup.children);
         for (var i = 0; i < intersects.length; i++) {
             if (intersects[i].object == plane) {
                 show = true

@@ -18,7 +18,6 @@ var Shader = function(){
     } 
     this.init = function () {
         this.node = document.getElementById('root')
-        console.log(this.node)
         //创建场景
         this.renderer.setSize(this.width, this.height)
         //创建场景
@@ -37,7 +36,6 @@ var Shader = function(){
         var that = this
         that.unifroms['texture'] = { value: new THREE.TextureLoader().load('./point.png') }
         loader.load(path, (mesh) => {
-          console.log(that.unifroms)
           var shaderMaterial = new THREE.ShaderMaterial({
             uniforms:that.unifroms,
             vertexShader: this.getShader('vertex'),

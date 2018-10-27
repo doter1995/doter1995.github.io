@@ -31,7 +31,6 @@ let initD3 = () => {
       .attr("class", "card_title")
       .on("click", d => {
         if (window.parent) {
-          console.log(parent);
           let link = d.link.substring(2, d.link.length);
           window.parent.location.href += link;
         } else {

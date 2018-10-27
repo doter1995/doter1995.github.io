@@ -55,7 +55,6 @@ window.onload = function () {
             }
             redraw();
         })
-    console.log(root)
     //绘制
     var arcGroup = svg.selectAll('g.arcG').data(pies(data))
         .enter()

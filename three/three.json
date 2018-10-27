@@ -3,16 +3,20 @@
     "title": "基础布局",
     "links": [{
       "link": "./backGround/",
-      "title": "跳动的球"
+      "title": "跳动的球",
+      "description": "通过shader将给定图片通过读取颜色，判断是否透明，以及取色，从而实现圆形。并提供大小换算。从而实现类似sprite的效果。营造出类3d效果。同时通过对歌曲的音频解析，将其实时频谱传入shader实现跳动。"
     }, {
       "link": "./bone/",
-      "title": "bone"
+      "title": "bone",
+      "description": "aaa"
     }, {
       "link": "./fonts/",
-      "title": "fonts"
+      "title": "fonts",
+      "description": "aaa"
     }, {
       "link": "./simplyGlobal",
-      "title": "simplyGlobal"
+      "title": "simplyGlobal",
+      "description": "aaa"
     }, {
       "link": "./normalGlobal",
       "title": "normalGlobal"

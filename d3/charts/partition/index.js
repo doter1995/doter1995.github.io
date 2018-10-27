@@ -72,8 +72,6 @@ window.onload = function () {
         .size([width - 2 * margin, height - 2 * margin])
     var nodes = partition(root);
     
-    console.log(nodes.descendants())
-
     //准备绘制
     var threeNode = svg.append("g")
         .attr('class', 'treeG')

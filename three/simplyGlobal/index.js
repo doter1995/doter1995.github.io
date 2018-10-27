@@ -6,7 +6,6 @@ window.onload = function () {
     const galaxyImage = './img/galaxy_starfield.png'
     const waterImage = './img/water_4k.png'
 
-    console.log("this three verion:", THREE.REVISION)
 
     const R = 200;
     var three = {
@@ -30,7 +29,6 @@ window.onload = function () {
     //创建相机
     var camera = new THREE.PerspectiveCamera(75, three.W / three.H, 0.1, 2000);
     //未设置场景的位置 所以默认为 0 0 0
-    console.log("scene.postion",scene.position)
     camera.lookAt(scene.position);
 
     camera.position.set(-58,222,-272);
@@ -78,12 +76,10 @@ window.onload = function () {
     //添加一个控制器
     var orbitControl = new THREE.OrbitControls(camera);
     function animate() {
-        console.log(camera.position);
         colundSphere.rotation.y+=0.001
         renderer.setSize(window.innerWidth, window.innerHeight);
         //重复渲染
         requestAnimationFrame(animate);
-        console.log("camera.position",camera.position)
         renderer.render(scene, camera);
     }
     animate();

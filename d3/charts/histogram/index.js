@@ -16,14 +16,11 @@ window.onload = function () {
     for (var index = 0; index < 100; index++) {
         dataSet.push(rand());
     }
-    console.log('dataSet', dataSet)
     //计算极值
-    console.log(d3.extent(dataSet))
     //构建直方图生成器
     var histogram = d3.histogram()
         .domain([150, 190])
     var data = histogram(dataSet)
-    console.log(data)
     //准备x坐标轴
     var x = d3.scaleLinear()
         .domain(d3.extent(dataSet))

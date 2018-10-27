@@ -7,7 +7,6 @@ function D3Map(config){
     var json = config.json?config.json:""
     var color = ["#2E2D57",'#35A8F9']
     //开始
-    console.log(Node)
     var svg = d3.select(Node)
         .append('svg')
         .attr('width',Width)
@@ -27,7 +26,6 @@ function D3Map(config){
     }
     d3.json(json, function (error, dataSet) {
         if (error) throw error;
-        console.log(dataSet.features)
         mapG.selectAll("path")
             .data(dataSet.features)
             .enter()

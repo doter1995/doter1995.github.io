@@ -177,7 +177,6 @@ window.onload = function () {
     MapPoints.map((item, i) => {
         var tipSphere = new THREE.Mesh(tipSphereGeo, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
         var p = tranPoint(item.position, R);
-        console.log(p)
         tipSphere.position.set(p.x,p.y,p.z);// todo
         tipSphere.name = item.name;
         curve.push(new THREE.Vector2(item.position[0], item.position[1]));

@@ -56,16 +56,13 @@ window.onload = function () {
     }
 
     // 使用hierarchy层次化
-    console.log("dataSet", dataSet)
     var root = d3.hierarchy(dataSet)
-    console.log("root=d3.hierarchy(dataSet)", root)
     //构建树布局方法d3.cluster()
     var tree = d3.tree()
         .size([height - 4 * margin, width - 4 * margin])
     //生成节点及links
     var nodes = tree(root);
     var links = nodes.links()
-    console.log("nodes=node.links()", links)
     //准备绘制
     var threeNode = svg.append("g")
         .attr('class', 'treeG')
@@ -121,7 +118,6 @@ window.onload = function () {
         .attr('x', function (d, i) { return d.y - 16 })
         .attr('y', function (d, i) { return d.x + 5 })
         .text(function (d, i) {
-            console.log(d.data.name)
             return d.data.name
         })
     linksGroup.selectAll("path")
