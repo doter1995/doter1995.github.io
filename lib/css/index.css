@@ -30,7 +30,7 @@ body {
 }
 
 .cards {
-  padding: 0 2%;
+  padding: 10px 2%;
   box-sizing: border-box;
 }
 
@@ -45,7 +45,8 @@ body {
 
 .card a {
   display: inline-block;
-  color: #333;
+  color: #222;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -59,5 +60,5 @@ body {
 
 .card p {
   text-indent: 2em;
-  color: #817c83;
+  color: #474448;
 }
