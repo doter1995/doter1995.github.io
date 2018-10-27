@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    </style>
+</head>
+<body>
+    <div id='root'/>
+    <script src="/lib/three/three.min.js"></script>
+    <script src="/lib/three/OrbitControls.js"></script>
+    <script src="/lib/three/loaders/OBJLoader.js"></script>
+    <script src="/lib/three/loaders/MTLLoader.js"></script>
+    <script src="./shader1.js"></script>
+    <script>
+       var shader = new Shader();
+       shader.init();
+    </script>
+</body>
+</html>

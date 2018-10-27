@@ -1,0 +1,49 @@
+#c {
+  display: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: content-box;
+  width: 100%;
+}
+
+body {
+  background-color: aliceblue;
+}
+
+#root {}
+
+.table {
+  background-color: #96969611;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  margin: 0 0 15px;
+  padding: 15px 2px 20px 0;
+  border-bottom: 1px solid #222222a6;
+  word-wrap: break-word;
+}
+
+.card a {
+  display: inline-block;
+  color: #333;
+  text-decoration: none;
+}
+
+.card_title {
+  margin: -7px 0 4px;
+  display: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.card p {
+  color: #817c83;
+}

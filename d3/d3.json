@@ -5,13 +5,13 @@
       "link": "./charts/pies/",
       "title": "pies"
     }, {
-      "link": "./d3/charts/tree/",
+      "link": "./charts/tree/",
       "title": "tree"
     }, {
-      "link": "./d3/charts/treeMap/",
+      "link": "./charts/treeMap/",
       "title": "treeMap"
     }, {
-      "link": "./d3/charts/partition/",
+      "link": "./charts/partition/",
       "title": "partition分区图"
     }, {
       "link": "./charts/pack/",
