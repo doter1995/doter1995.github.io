@@ -1,8 +1,8 @@
 // import THREE from 'three'
 // import Physijs from 'physijs'
 window.onload = function () {
-    Physijs.scripts.worker = '../js/physijs/physijs_worker.js';
-    Physijs.scripts.ammo = '../physijs/ammo.js';
+    Physijs.scripts.worker = '/lib/three/physijs/physijs_worker.js';
+    Physijs.scripts.ammo = '/lib/three//physijs/ammo.js';
 
     console.log("this Root verion:", THREE.REVISION)
     const R = 200;
