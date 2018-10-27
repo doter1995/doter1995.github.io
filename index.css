@@ -35,16 +35,17 @@ header {
   flex-direction: row;
   justify-content: space-between;
 }
-
 .nav li {
   text-align: center;
   width: 8rem;
+  height: 3.4rem;
   padding: 1rem;
   display: inline-block;
+  box-sizing: border-box;
 }
 
 .nav li:hover {
-  background-color: #398bdb;
+  background: radial-gradient(#5180e8,#212369);
   color: white;
 }
 
