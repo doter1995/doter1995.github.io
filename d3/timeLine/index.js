@@ -1,16 +1,16 @@
 // import * as d3 from 'd3'
 window.onload = function () {
     var width = 400, height = 400;
-
+    var bgColor = "#2a56a7";
     //data 数据 dataTYpe 数据类型 filter指向具体的那个数据（某个站点） isrun 是否播放
     function initTimeline() {
         var fileName = './timeline1.csv'
         var W = window.innerWidth / 24 * 22,
-            H = 320;
+            H = window.innerHeight/ 24 * 22;
         var width = W,
             height = H - 40;
         var div = document.getElementById('root_TimeLine')
-        div.style.backgroundColor = '#496f66'
+        div.style.backgroundColor = bgColor
         console.log("object d3", d3);
         var svg = d3
             .select(div)
@@ -104,20 +104,17 @@ window.onload = function () {
 
         var linePath = g
             .append("path")
-            .attr("fill", 'none')
-            .attr("stroke-width", 1)
-            .attr("stroke", '#395f56');
-        g.append('rect').attr('fill', '#496f66').attr('x', -margin.left)     // y轴方块背景色
+            .attr("class", 'linePath');
+        g.append('rect').attr('class', "bgColor").attr('x', -margin.left)     // y轴方块背景色
             .attr('y', 0).attr('width', margin.left).attr('height', height);
-        g.append('rect').attr('fill', '#496f66').attr('x', -margin.left)     // x轴方块背景色
+        g.append('rect').attr('class', "bgColor").attr('x', -margin.left)     // x轴方块背景色
             .attr('y', -margin.right).attr('width', width).attr('height', margin.right);
-        var yGroup = g.append("g").attr('fill', '#FFF').attr('stroke', '#ddd');
+        var yGroup = g.append("g").attr('class', 'yGroup');
 
 
         var xGroup = g
             .append("g")
-            .attr('fill', '#333')
-            .attr('stroke', '#ddd');
+            .attr('class', 'xGroup')
         //.attr("transform", "translate(0," + height + ")"); 使用轴在下方
 
 
@@ -128,15 +125,13 @@ window.onload = function () {
         focus
             .append('line')
             .attr('id', 'focusLineX')
-            .attr('fill', 'none')
-            .attr('stroke', 'orange')
-            .attr('stroke-width', '1px');
+            .attr('class', 'focusLineX')
+            
         focus
             .append('line')
             .attr('id', 'focusLineY')
-            .attr('fill', 'none')
-            .attr('stroke', 'orange')
-            .attr('stroke-width', '1px');
+            .attr('class', 'focusLineY')
+            
         focus
             .append('circle')
             .attr('id', 'focusCircle')

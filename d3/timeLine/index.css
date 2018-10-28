@@ -1,0 +1,29 @@
+.linePath {
+  fill: none;
+  stroke: #948f03;
+  stroke-width: 2px;
+}
+.bgColor{
+  fill: #2a56a7;
+}
+.yGroup{
+  stroke: aquamarine;
+}
+.xGroup{
+  stroke: aquamarine;
+}
+.focusLineX {
+  stroke: coral;
+}
+.focusLineY{
+  stroke: coral;
+}
+.tick line{
+  stroke: aquamarine;
+}
+.tick text{
+  stroke: #eee;
+}
+.domain{
+  stroke: aquamarine;
+}

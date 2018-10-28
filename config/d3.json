@@ -34,6 +34,11 @@
         "link":"./dashBoard/",
         "title":"dashBoard",
         "description":"使用d3进行svg的绘制，仪表盘。"
+      },
+      {
+        "link":"./timeLine/",
+        "title":"timeLine",
+        "description":"使用d3进行svg的绘制，时间轴，只能缩放x轴。"
       }
     ]
   },{
