@@ -7,15 +7,15 @@ window.onload = function () {
     widget= new GitChain({
         domNode:'#root',
         data: data,//数据
-        title: 'title',//标题
+        title: '这是一个展示demo(封装过的组件)',//标题
         isCenter:false,//是否居中 默认居左
         itemW:0,//左侧图的宽度，0为不设置
         isSortTime:true,//是否时间朝下
         width:window.innerWidth,
         height:window.innerHeight,
-        useDataset:function(d){console.log('useData',d)},
+        useDataset:function(d){alert("you click the "+d)},
         style: {
-            textColor:['#333',"#eee"],//文字颜色及高亮色
+            textColor:['#777',"#eee"],//文字颜色及高亮色
             //代表用户的颜色
             userColor: ['#39397a', '#627a35', '#8d6d2c', '#853c37', '#737f74'],
             //分类色：A：B：C

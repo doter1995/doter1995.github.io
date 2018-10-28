@@ -6,6 +6,11 @@
         "link":"./D3Map/",
         "title":"D3地图",
         "description":"使用d3.geo实现基础地图绘制，使用定时器修改属性实现动态效果"
+      },
+      {
+        "link":"./gitChain/demo",
+        "title":"gitChain",
+        "description":"使用d3进行svg的绘制，封装了部分按钮事件以及上下排序等等。"
       }
     ]
   },{
