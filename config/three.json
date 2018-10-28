@@ -8,36 +8,39 @@
     }, {
       "link": "./bone/",
       "title": "bone",
-      "description": "aaa"
+      "description": "简单的骨骼动画"
     }, {
       "link": "./fonts/",
       "title": "fonts",
-      "description": "aaa"
+      "description": "简单的渲染3d文字"
     }, {
       "link": "./simplyGlobal",
       "title": "simplyGlobal",
-      "description": "aaa"
+      "description": "基础版地球仪"
     }, {
       "link": "./normalGlobal",
-      "title": "normalGlobal"
-    }, {
-      "link": "./info",
-      "title": "info"
+      "title": "normalGlobal",
+      "description": "扩展版地球仪,通过经纬度转3D坐标，将其串联成线"
     }, {
       "link": "./lol",
-      "title": "lol英雄渲染"
+      "title": "lol英雄渲染",
+      "description": "渲染3d模型，加入雾化效果"
     }, {
       "link": "./physi/",
-      "title": "重力坠落"
+      "title": "重力坠落",
+      "description": "使用physijs扩展three，实现重力坠落模拟"
     }, {
       "link": "./shader",
-      "title": "shader"
+      "title": "shader",
+      "description": "通过将3d模型使用shader处理"
     }, {
       "link": "./threeTest/",
-      "title": "test"
+      "title": "实战3d数据展示",
+      "description": "使用3的构建工具构建简单3d模型后，进行场景编排。数据展示采用实时3d空间点转屏幕空间后，检测空间距离排序div浮动框"
     }, {
-      "link": "./witeBg/",
-      "title": "witeBg"
+      "link": "./overallView/",
+      "title": "全景图",
+      "description": "将全景图处理为6面正方体，相机定位至中心，实现全景"
     }]
   }]
 }
