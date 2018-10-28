@@ -16,6 +16,10 @@
         "link":"./lineChart/",
         "title":"lineChart",
         "description":"使用d3进行svg的绘制，定制化开发，添加部分特殊标记，以及动态增加数据，封装了部分常用功能。"
+      },{
+        "link":"./workflow/",
+        "title":"workflow",
+        "description":"使用d3进行svg的绘制，定制化开发，添加部分特殊标记，以及动态增加数据，封装了部分常用功能。"
       }
     ]
   },{
