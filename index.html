@@ -29,11 +29,13 @@
   console.log(location.hash)
   let reSetouter = () => {
     let hashLink = location.hash
+    console.log(hashLink)
     let iframe = d3.select('#iframe')
     if (hashLink == "") {
       iframe.attr('src', './info/')
     } else {
-      iframe.attr('src', hashLink.substring(1, hashLink.length));
+      console.log(hashLink)
+      iframe.attr('src', "./"+hashLink.substring(1, hashLink.length));
     }
   }
   window.onhashchange = reSetouter;
