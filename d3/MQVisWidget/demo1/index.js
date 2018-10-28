@@ -4,23 +4,12 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var formatDate = d3.timeFormat("%Y-%m-%d %H:%M:%S");
 var random = function (){return Math.random()/2+Number(0.4)}
 window.onload = function () {
-    var yAxis2 = [];
-    for (var i = 1; i <= 350; i += 2) {
-        yAxis2.push([i - 1, i, 'rgba(10,155,51,0.3)', {
-            yAxis: [1],
-            visible: true
-        }])
-        yAxis2.push([i, i + 1, 'rgba(34,42,71,0.8)', {
-            yAxis: [1],
-            visible: true
-        }])
-    }
     var config = {
         domNode: '#root',
         title: '<div class="svg_title" >&nbsp;</div>',
         width: window.innerWidth - 20,
         height: window.innerHeight - 20,
-        xAxis: time ,
+        xAxis: ['2017-05-28 21:12:32', '2017-10-20 21:12:38'],
         yAxis: [
             [0, 2, 'rgba(10,19,51,0.8)', {
                 yAxis: [1],
@@ -34,9 +23,32 @@ window.onload = function () {
                 yAxis: [1],
                 visible: true
             }]],
-        yAxis2: yAxis2,
-        yAxisSelected: 1,
-        lines: data1,
+        yAxis2: [
+            [0, 2.325, 'rgba(10,19,51,0.8)', {
+                yAxis: [1],
+                visible: true
+            }],
+            [2.325, 4.325, 'rgba(34,42,71,0.8)', {
+                yAxis: [1],
+                visible: false
+            }],
+            [6.325, 8.325, 'rgba(57,65,91,0.8)', {
+                yAxis: [1],
+                visible: true
+            }],
+            [10.325, 12.325, 'rgba(83,89,112,0.8)', {
+                yAxis: [1],
+                visible: true
+            }]],
+        yAxisSelected: 0,
+        lines: [
+            [3.2, '2017-06-01 21:12:32', '2017-06-01 21:12:32', { leftAttr: "attr1",color:"#f00",thick:2 }],
+            [6.2, '2017-06-15 21:12:32', '2017-06-15 21:12:32', { leftAttr: "attr2",thick:3 }],
+            [2.2, '2017-07-01 21:12:32', '2017-08-15 21:12:38', { rightAttr: "attr1" ,thick:2}],
+            [4.2, '2017-08-17 21:12:32', '2017-08-31 21:14:38', { rightAttr: "attr2" ,thick:2}],
+            [7.2, '2017-08-15 4:12:38', '2017-08-30 21:12:38', { leftAttr: "attr3",thick:5 }],
+            [0.2, '2017-09-01 21:12:32', '2017-09-01 21:12:32', { leftAttr: "attr4",thick:4,color:"#f00", rightAttr: "attr3" }]
+        ],
         colorMap: [[0, "#146600"], [0.25, "#0f0"], [0.50, "#f00"], [0.75, "#00f"], [1, "#34FF00"]],
         attrOpts: [{
             type: 'leftAttr',
@@ -76,13 +88,47 @@ window.onload = function () {
             console.log(target, event, payload)
         },
         pointLength:100000,
-        // onSelectColorMap: getResultData,
-        onSelectColorMap:function(){},
+        onSelectColorMap: function (x1, x2,yRange,dataSet,pointLength,UID) {
+            var data = []
+            dataSet ? data = dataSet:''
+            var arry = []
+            var date1 = parseDate(x1)
+            var date2 = parseDate(x2)
+            data.forEach(function (item, i) {
+                if(item[1]==item[2]&&parseDate(item[1])>date1&&parseDate(item[1])<date2){
+                    arry.push([item[0],item[2],random()])
+                }else if (parseDate(item[1]) < date1 && parseDate(item[2]) > date1) {
+                    if ( parseDate(item[2]) > date2) {//线条穿过 item[1] date1  date2 item[2]
+                       var step = ((date2-date1)/pointLength/1000)
+                       console.log("strep",step)
+                       step>100?step=10:""
+                       for(var i=0;i<step;i++){
+                           arry.push([item[0],formatDate(Number(date1.valueOf()+i*pointLength*1000)), random()])
+                       }
+                    } else {//item[1] date1 item[2] date2
+                        var step = ((parseDate(item[2])-date1)/pointLength/1000)
+                        console.log("strep",step)
+                        step>100?step=10:""
+                        for(var i=0;i<step;i++){
+                            arry.push([item[0],formatDate(Number(date1.valueOf()+i*pointLength*1000)), random()])
+                        }
+                    }
+                }else if (parseDate(item[1]) < date2 && parseDate(item[2]) > date2) {// date1 item[1]  date2  item[2]
+                     var step = ((date2-parseDate(item[1]))/pointLength/1000)
+                    console.log("strep",step)
+                    step>100?step=10:""
+                    for(var i=0;i<step;i++){
+                        arry.push([item[0],formatDate(Number(parseDate(item[1]).valueOf()+i*pointLength*1000)), random()])
+                    }
+                }
+            })
+            return arry
+        },
         OnHoverSelect: function (data) {
         },
         OnHoverSet:[],
-        colorMapSelectOffset: 30000,
-        hoverSelectOffset: 30000,
+        colorMapSelectOffset: 300000,
+        hoverSelectOffset: 300000,
         markerInfo: function (x, y, d) {
             return '<div>当前鼠标值：X：' + x + 'Y：' + y + '</div>' +
                 '<div>当前值：Y:' + d.data[0] + '</div>' +
@@ -117,62 +163,10 @@ window.onload = function () {
     widget.render()
     var config1 = config
     config1.node = '#root1'
-    function getResultData(x1, x2,yRange,dataSet,pointLength,UID,x0) {
-        setTimeout(function (){
-            if(widget){
-                var data = []
-                dataSet ? data = dataSet:''
-                var arry = []
-                var date1 = parseDate(x1)
-                var date2 = parseDate(x2)
-                data.forEach(function (item, i) {
-                    if(item[1]==item[2]&&parseDate(item[1])>date1&&parseDate(item[1])<date2){
-                        arry.push([item[0],item[2],random()])
-                    }else if (parseDate(item[1]) < date1 && parseDate(item[2]) > date1) {
-                        if ( parseDate(item[2]) > date2) {//线条穿过 item[1] date1  date2 item[2]
-                           var step = ((date2-date1)/pointLength/1000)
-                           step>100?step=10:""
-                           for(var i=0;i<step;i++){
-                               arry.push([item[0],formatDate(Number(date1.valueOf()+i*pointLength*1000)), random()])
-                           }
-                        } else {//item[1] date1 item[2] date2
-                            var step = ((parseDate(item[2])-date1)/pointLength/1000)
-                            step>100?step=10:""
-                            for(var i=0;i<step;i++){
-                                arry.push([item[0],formatDate(Number(date1.valueOf()+i*pointLength*1000)), random()])
-                            }
-                        }
-                    }else if (parseDate(item[1]) < date2 && parseDate(item[2]) > date2) {// date1 item[1]  date2  item[2]
-                         var step = ((date2-parseDate(item[1]))/pointLength/1000)
-                        step>100?step=10:""
-                        for(var i=0;i<step;i++){
-                            arry.push([item[0],formatDate(Number(parseDate(item[1]).valueOf()+i*pointLength*1000)), random()])
-                        }
-                    }
-                })
-                // 此处调用函数，设置伪彩点的颜色。
-                widget.showHoverData(arry,UID)
-            }
-        },1000)
-        return []
-    }
+
 }
 window.onresize = function () {
     var width = window.innerWidth - 20
     var height = window.innerHeight - 20
     widget.updateOptions({ width: width, height: height })
 }
-//关于异步加载说明：
-//
-
-/*
-
-1. 鼠标移动时，回调onSelectColorMap配置的函数A。
-
-2. 函数A会附带当前选区位置，以及当前UID。(防止多次调用乱序)
-
-3. 使用时在函数A中ajax请求服务器,请求成功后,得到数据data
-
-4. 调用本通试图的.showHoverData(data,UID)//用于在图表中展示伪彩数据。
-
-*/

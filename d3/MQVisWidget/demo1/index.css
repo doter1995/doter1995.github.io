@@ -3,7 +3,9 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
+body{
+  background-color: #4e5c63;
+}
 .svg_title {
   text-align: center;
   font-size: 0.7rem;
