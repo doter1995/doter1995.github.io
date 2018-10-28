@@ -35,6 +35,8 @@ body {
 }
 
 .card {
+  display: block;
+  text-decoration: none;
   position: relative;
   width: 100%;
   margin: 0 0 15px;
