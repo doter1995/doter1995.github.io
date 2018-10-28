@@ -33,10 +33,10 @@ window.onload = function () {
     //         lineChart.addData(addDataTest())
     //         aaa++
     //     }
-    // }, 400)
+    // }, 40)
 
 
-    // //计算所有点
+    //计算所有点
     //  for(var i=0;i<315;i++){
     //     dataSet.push(addDataTest())
     // }
@@ -55,8 +55,8 @@ window.onload = function () {
             "value": "312311",
             "ratio": "0.7589"
         }],
-        width:714,
-        height:237,
+        // width:window.innerWidth-40,
+        // height:window.innerHeight-40,
         markImage:['./point.png','./star.png'],
         dTipIcon:['./zonge.png','./leiji.png'],
         tipTitle:['2016年总销售额','2017年预计总销售额'],
@@ -71,7 +71,6 @@ window.onload = function () {
     })
    
     d3.json('./data/linesData.json',function(d){
-        console.log(d.lineList)
        lineChart.addData(d.lineList)
     })
 };

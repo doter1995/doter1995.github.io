@@ -10,7 +10,12 @@
       {
         "link":"./gitChain/demo",
         "title":"gitChain",
-        "description":"使用d3进行svg的绘制，封装了部分按钮事件以及上下排序等等。"
+        "description":"使用d3进行svg的绘制，定制化开发的gitChain，封装了部分按钮事件以及上下排序等等。"
+      },
+      {
+        "link":"./lineChart/",
+        "title":"lineChart",
+        "description":"使用d3进行svg的绘制，定制化开发，添加部分特殊标记，以及动态增加数据，封装了部分常用功能。"
       }
     ]
   },{
