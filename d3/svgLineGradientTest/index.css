@@ -12,7 +12,7 @@ text{
     width: 200px;
     position: absolute;
     padding: 10px;
-    font-size: .4rem;
+    font-size: .8rem;
     top:-800px;
     left:-220px;
     color: #eee;
@@ -30,4 +30,10 @@ text{
     border-bottom: 12px solid #666;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
+}
+#color_Config{
+    display: none;
+    position: absolute;
+    background-color: #aaa;
+    padding: 10px;
 }
