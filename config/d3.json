@@ -29,6 +29,11 @@
         "link":"./MQVisWidget/demo1",
         "title":"MQVisWidget_demo1",
         "description":"功能同上。"
+      },
+      {
+        "link":"./dashBoard/",
+        "title":"dashBoard",
+        "description":"使用d3进行svg的绘制，仪表盘。"
       }
     ]
   },{
