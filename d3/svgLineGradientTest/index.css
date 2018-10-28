@@ -7,6 +7,7 @@ text{
 }
 #root{
     display: flex;
+    background-color: #171717;
 }
 #div_tip{
     width: 200px;
@@ -36,4 +37,13 @@ text{
     position: absolute;
     background-color: #aaa;
     padding: 10px;
+}
+.YaxisG *{
+    stroke: #aaa;
+}
+.XaxisG *{
+    stroke: #aaa; 
+}
+.ZaxisG {
+    stroke: #aaa; 
 }

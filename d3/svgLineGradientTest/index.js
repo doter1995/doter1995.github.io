@@ -3,15 +3,14 @@ window.onload = function () {
 
   var root = d3.select('#root')
     .attr('width', '100%')
-    .style('background-color', '#eee')
   var height = window.innerHeight - 1
   var width = root.node().clientWidth
   var config = {
     background: {
       type: 1,
       data: [
-        { index: 0, value: 2, color: ['#333', '#fee'] },
-        { value: 2, color: ['#333', '#eee'] }
+        { index: 0, value: 2, color: ['#654', '#456'] },
+        { value: 2, color: ['#654', '#456'] }
       ]
     }
   }
@@ -143,7 +142,6 @@ window.onload = function () {
       linearGradient.append("stop")
         .attr("offset", "100%")
         .style("stop-color", endC);
-      console.log(id)
       return id;//返回给d.id 用于在rect中使用
     }
     // 构建背景色(便于背景色调整)
@@ -180,7 +178,6 @@ window.onload = function () {
       var sum = domain[1] - domain[0];
       if (config.background.type == 0) {
         var data = config.background.data[0]
-        console.log('datata', data)
         if (domain[0] > data.value) {
           dataSet.push({
             index: 0,
@@ -244,7 +241,6 @@ window.onload = function () {
     }
     function updateBGColor() {
       var dataSet = initBGdataSet()
-      console.log(dataSet)
       var back = backG.selectAll('rect')
         .data(dataSet)
       back.exit().remove()
@@ -277,7 +273,6 @@ window.onload = function () {
     dataSet.sort(function (a, b) {
       return a.h - b.h
     })
-    console.log(dataSet)
 
     var line = lines.selectAll('g.line')
       .data(dataSet)
@@ -381,11 +376,10 @@ window.onload = function () {
         .event
         .transform
         .rescaleY(Y);
-      console.log(xz, yz)
 
       //更新 x和Y轴
-      XaxisG.call(d3.axisBottom().scale(xz)).attr("class", "axisLine")
-      YaxisG.call(d3.axisLeft().scale(yz)).attr("class", "axisLine")
+      XaxisG.call(d3.axisBottom().scale(xz)).attr("class", "XaxisG")
+      YaxisG.call(d3.axisLeft().scale(yz)).attr("class", "YaxisG")
       line.select('rect')
         .transition()
         .duration(100)
@@ -413,7 +407,6 @@ window.onload = function () {
       var type = data.type;
       var mxy = [d3.event.clientX, d3.event.clientY]
       var backg = JSON.parse(JSON.stringify(config.background))
-      console.log(backg)
       initDialog()
 
       function initDialog() {
@@ -464,7 +457,6 @@ window.onload = function () {
             backg.data[backg.type].color[1] = item.value
           }
         })
-        console.log('back####', backg)
         config.background = backg
       }
       //选择隐藏项
@@ -482,7 +474,6 @@ window.onload = function () {
       //选择Y配置背景色类型
       d3.select('#color_type').on('change', function () {
         var a = d3.select('#color_type').node().value
-        console.log('aaa', a)
         backg.type = a
         if (a == 0) {//选中两端
           d3.select('#color2').style('display', 'none')

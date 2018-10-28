@@ -44,6 +44,10 @@
         "link":"./widget/demo",
         "title":"widget",
         "description":"使用d3进行svg的绘制，自定义绘制X轴"
+      },{
+        "link":"./svgLineGradientTest",
+        "title":"线条渐变形",
+        "description":"使用d3进行svg的绘制，通过插值器及svg渐变实现根据数据渐变现实线条"
       }
     ]
   },{
