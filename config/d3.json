@@ -39,6 +39,11 @@
         "link":"./timeLine/",
         "title":"timeLine",
         "description":"使用d3进行svg的绘制，时间轴，只能缩放x轴。"
+      },
+      {
+        "link":"./widget/demo",
+        "title":"widget",
+        "description":"使用d3进行svg的绘制，自定义绘制X轴"
       }
     ]
   },{

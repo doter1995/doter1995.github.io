@@ -33,6 +33,7 @@ function Widget(config) {
         var Node = d3.select(domNode)
         _svgtitle = Node
             .append('div')
+            .attr("class","title")
             .style('text-align', 'center')
             .style('font-weight', '600')
             .style('font-size', '1rem')
@@ -48,11 +49,11 @@ function Widget(config) {
         xMain = formatX(xAxis)
         console.log(xMain)
        tipY = rootG.append('rect')
+            .attr('class',"baColor")
             .attr('x', -20)
             .attr('y', 0)
             .attr('width', 21)
             .attr('height', H)
-            .attr('fill','#fff')
             .on('click', function (d, i) {
                 var mouse = d3.mouse(this)
                 var data = Y.invert(mouse[1]);

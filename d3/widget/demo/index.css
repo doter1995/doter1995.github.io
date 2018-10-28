@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.title{
+    color: #eee;
+    font-weight: 700;
+}
+.baColor{
+   fill:  #171717;
+}
+.yAxis text{
+    fill: #999;
+}
+.yAxis line{
+    stroke: #999;
+    stroke-width: 2px;
+}
+.yAxis path{
+    stroke: #999;
+    stroke-width: 2px;
+}
+.xAxis text{
+    fill: #999;
+
+}
