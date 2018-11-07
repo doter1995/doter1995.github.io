@@ -12,7 +12,7 @@ window.onload = function () {
         itemW:0,//左侧图的宽度，0为不设置
         isSortTime:true,//是否时间朝下
         width:window.innerWidth,
-        height:window.innerHeight,
+        height:window.innerHeight*9/10,
         useDataset:function(d){alert("you click the "+d)},
         style: {
             textColor:['#777',"#eee"],//文字颜色及高亮色
