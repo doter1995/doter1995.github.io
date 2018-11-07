@@ -1,3 +1,4 @@
+
 #c {
   display: none;
 }
@@ -6,13 +7,14 @@
   margin: 0;
   padding: 0;
   box-sizing: content-box;
-  width: 100%;
 }
 
 body {
   background-color: aliceblue;
 }
-
+#root {
+  margin-top: 3.4rem;
+}
 .table {
   background-color: #96969611;
   width: 70%;

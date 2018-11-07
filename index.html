@@ -9,38 +9,13 @@
   <style font-display="auto"></style>
   <link rel="stylesheet" href="./index.css">
 </head>
-
 <body>
-  <header>
-    <h1 class="hidden">doter blog</h1>
-    <nav class="nav">
-      <ul id="top_left">
-      </ul>
-      <ul id="top_right">
-      </ul>
-    </nav>
-    <div class="fill_nav" />
-  </header>
+  <header></header>
   <iframe id="iframe" name="view"></iframe>
 </body>
 <script src="/lib/d3/d3.min.js"></script>
 <script src="/lib/page/initTopBar.js"></script>
 <script>
-  let reSetouter = () => {
-    let hashLink = location.hash
-    let iframe = d3.select('#iframe')
-    if (hashLink == "") {
-      iframe.attr('src', './info/')
-    } else {
-      if (location.hostname == "localhost" || location.hostname == "127.0.0.1") {
-        iframe.attr('src', hashLink.substring(1, hashLink.length));
-      } else {
-        iframe.attr('src', "https://" + location.host + "/" + hashLink.substring(1, hashLink.length));
-      }
-    }
-  }
-  window.onhashchange = reSetouter;
-  reSetouter();
 </script>
 
 </html>

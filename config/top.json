@@ -6,12 +6,12 @@
   }],
   "right": [{
       "title": "D3",
-      "link": "./#d3/",
+      "link": "/d3/",
       "newTable": false
     },
     {
       "title": "THREE",
-      "link": "./#three/",
+      "link": "/three/",
       "newTable": false
     },
     {
