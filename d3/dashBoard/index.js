@@ -25,7 +25,6 @@ window.onload = function () {
     .innerRadius(inner - 4)
     .outerRadius(inner)
   var arcG = svg.append('g')
-  console.log(pie(set))
   arcG.selectAll('path')
     .data(pie(set))
     .enter()
@@ -39,7 +38,6 @@ window.onload = function () {
   d3.symbol(d3.symbolDiamond)
   var scaleArc = d3.scaleLinear().domain([0, 100]).range([-0.75 * Math.PI, 0.75 * Math.PI])
   var scaleKe = d3.scaleLinear().domain([0, 100]).range([-225, 45])
-  console.log(scaleArc(0))
   var dataSet = 0,oldData=0
   //绘制刻度
   var keG = arcG.append('g')
@@ -86,8 +84,8 @@ window.onload = function () {
     .attr('height', 80)
   var dataText=dataTip.append('text')
     .style('font-size', 60)
+    .style('text-anchor',"middle")
     .attr('fill', '#a00')
-    .attr('x', -40)
     .attr('y', 180)
     .text(dataSet)
   setInterval(update,1000)
@@ -105,13 +103,10 @@ window.onload = function () {
     })
      .tween('',
        function(){
-         console.log('aaa',oldData,dataSet)
          var i = d3.interpolateNumber(oldData,dataSet);
          var text;
          return function(t){
-          console.log(i(t))
           const d0 = i(t) 
-          console.log('bbb',scaleKe(d0))
            return 'rotate('+scaleKe(d0)+')'
          }
        })
