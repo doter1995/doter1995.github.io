@@ -6,9 +6,20 @@
   box-sizing: inherit;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#c {
+  position: fixed;
+  z-index: -1;
+}
+
 .hidden {
   display: none;
 }
+
 a {
   display: inline-block;
   text-decoration-line: none;
@@ -20,10 +31,12 @@ body {
   width: 100%;
   color: rgb(200, 200, 200);
 }
+
 header {
   width: 100%;
   overflow: hidden;
 }
+
 .nav {
   position: fixed;
   z-index: 99;
@@ -34,6 +47,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .nav li {
   text-align: center;
   width: 8rem;
@@ -44,7 +58,7 @@ header {
 }
 
 .nav li:hover {
-  background: radial-gradient(#5180e8,#212369);
+  background: radial-gradient(#5180e8, #212369);
   color: white;
 }
 
