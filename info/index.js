@@ -3,7 +3,6 @@ window.onload = function() {
 };
 
 let init = () => {
-  console.log(window.innerHeight);
   var root = d3
     .select("#root")
     .append("svg")
@@ -47,7 +46,6 @@ let Chart = (root, src, config) => {
   };
   // 初始化绘制
   let initDraw = dataSet => {
-    console.log(dataSet);
     let startDate = parseDate(dataSet[0].startDate);
     let newDate = new Date().valueOf();
     let heightCneter = config.height / 2;
@@ -106,18 +104,16 @@ let Chart = (root, src, config) => {
     tip.select(".company").text(d => d.company);
     tip.select(".info").text(d => d.info);
     d3.select("body").on("click", () => updateDraw(++Item_Idx, dataSet));
-    d3.select("#tip").on("click", () => updateDraw(++Item_Idx, dataSet));
   };
   //更新绘制
-  let updateDraw = (i, dataSet) => {
-    console.log("aaaaaaa");
-    if (i >= dataSet.length) {
+  let updateDraw = (itemIndex, dataSet) => {
+    if (itemIndex >= dataSet.length) {
       Item_Idx = 0;
-      i = 0;
+      itemIndex = 0;
     }
-    let item = dataSet[i];
+    let item = dataSet[itemIndex];
     //更新内容
-    let tip = d3.select("#tip").datum(dataSet[i]);
+    let tip = d3.select("#tip").datum(dataSet[itemIndex]);
     tip.select(".title").text(d => d.title);
     tip.select(".company").text(d => d.company);
     tip.select(".info").text(d => d.info);
